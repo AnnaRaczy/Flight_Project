@@ -1,0 +1,578 @@
+@import "./generic/reset";
+@import "./settings/buttons";
+@import "./settings/colors";
+@import "./settings/fonts";
+// @import './variables/'
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,600;1,100;1,300&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  line-height: 3rem;
+  margin-top: 5.5rem;
+  margin-bottom: 15rem;
+  background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)),
+    url("../rice_fields.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-size: 13px;
+  font-family: "Montserrat";
+  letter-spacing: 0.5px;
+}
+
+.header {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 2rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.422),
+    rgba(238, 232, 232, 0.15)
+  );
+  box-shadow: rgb(37 42 49 / 16%) 0px 0px 2px 0px,
+    rgb(37 42 49 / 12%) 0px 2px 4px 0px;
+  padding: 12px;
+  box-sizing: border-box;
+
+  &_greet,
+  &_name {
+    color: #fff;
+  }
+  &_name {
+    font-weight: 400;
+    padding: 0 0.3em;
+    font-size: 0.9em;
+  }
+  &_btn,
+  .MuiButton-text-login {
+    border-radius: 3px;
+    border: none;
+    padding: 0.35em 1.3em;
+    background: linear-gradient(45deg, #309c83, #78cfbb);
+    color: #fff;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    letter-spacing: 0.04em;
+    &--sign {
+      margin-left: 1rem;
+    }
+  }
+
+  .MuiButton-text-login {
+    padding: 0 1.3em;
+    text-transform: capitalize;
+  }
+}
+
+.title {
+  // border: 1px solid black;
+  color: white;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 100;
+}
+
+.container {
+  // border: 1px solid black;
+  border-radius: 8px;
+  width: 70%; //60%
+  margin: 0 auto;
+  padding: 0 15px;
+  // background-color: #fff;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.822),
+    rgba(209, 201, 201, 0.45)
+  );
+  margin-bottom: 1rem;
+}
+
+// .wrapper_ways {
+//   border: 1px solid black;
+//   display: flex;
+
+//   .ways {
+//     border: 1px solid black;
+//     width: 7rem;
+
+//     &_label {
+//       margin-left: 0.2rem;
+//       margin-right: 1rem;
+//     }
+//   }
+// }
+
+.no_flights {
+  padding: 1rem;
+  text-align: center;
+  font-weight: 300;
+
+  .fa-exclamation-circle {
+    padding-right: 0.3rem;
+    color: #000;
+  }
+}
+
+.arrow_icon {
+  margin-left: 0.3rem;
+  padding-left: 0.5rem;
+}
+
+.selections {
+  display: flex;
+
+  .users_icon {
+    margin-right: 0.7rem;
+  }
+
+  .travelers_box {
+    // border: 1px solid black;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+  }
+
+  &_ways,
+  .travelers_box {
+    margin-top: 0.5rem;
+    text-align: center;
+    width: 6.5rem;
+    border-radius: 5px;
+  }
+
+  .MuiButton-text {
+    padding: 0.6em 1.1em;
+
+    &:hover {
+      transition: all 0.35s ease-in;
+      color: rgba(0, 0, 0, 0.918);
+    }
+  }
+
+  select:hover,
+  #travelers:hover {
+    cursor: pointer;
+  }
+
+  &_all {
+    // border: 1px solid black;
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+
+    &--inputs {
+      line-height: 2rem;
+      width: 100%;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+}
+
+.search_box {
+  // border: 1px solid black;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+
+  .fa-arrow-right {
+    padding-left: 0.7em;
+  }
+}
+
+// flight component
+
+.wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 0.75rem;
+  background: none;
+  width: 73.5%;
+
+  // .flights_border {
+  //   border-right: 1px solid #000;
+  // }
+
+  .flights_checkboxes {
+    width: 2%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+  .flights_wrapper {
+    background: linear-gradient(
+      rgba(255, 255, 255, 0.925),
+      rgba(199, 193, 193, 0.925)
+    );
+    display: flex;
+    width: 55%;
+    justify-content: space-between;
+    border-radius: 5px;
+
+    .flights_data {
+      // border: 1px solid black;
+      border-radius: 5px;
+      margin-left: 1rem;
+      width: 45%;
+
+      .flight_day {
+        font-style: italic;
+        font-weight: 400;
+      }
+      .flight_hours,
+      .flights_cities {
+        position: relative;
+        padding-left: 1rem;
+      }
+
+      .flight_hours {
+        top: -1rem;
+        font-weight: bold;
+        font-size: 0.9rem;
+      }
+
+      .flights_cities {
+        top: -2.7rem;
+      }
+
+      .flights_data--to {
+        position: relative;
+        top: -3rem;
+      }
+    }
+
+    .flights_numbers {
+      // border: 1px solid black;
+      border-radius: 5px;
+      // padding-left: 0.5rem;
+      width: 40%;
+
+      .fa-plane {
+        padding-right: 0.8rem;
+      }
+
+      &--from,
+      &--to {
+        font-size: 0.7rem;
+      }
+
+      &--from {
+        padding-top: 2rem;
+      }
+
+      &--to {
+        position: relative;
+        top: 3rem;
+      }
+    }
+  }
+
+  .flights_info {
+    // border: 1px solid black;
+    border-radius: 5px;
+    width: 16.5%;
+    padding: 2.7em 1em;
+    background: linear-gradient(
+      rgba(255, 255, 255, 0.925),
+      rgba(199, 193, 193, 0.925)
+    );
+
+    // &--airline {
+    // position: relative;
+    // top: -1.2rem;
+    // }
+
+    .flights_airline {
+      position: relative;
+      top: -1.8rem;
+      padding-left: 0.5rem;
+    }
+  }
+
+  .flights_price {
+    // border: 1px solid black;
+    border-radius: 5px;
+    width: 25%;
+    text-align: center;
+    position: relative;
+    background: linear-gradient(
+      rgba(255, 255, 255, 0.925),
+      rgba(199, 193, 193, 0.925)
+    );
+
+    .baby_icon {
+      margin-left: 1.5rem;
+    }
+    &--passengers {
+      padding-left: 0.5rem;
+      font-style: bold;
+    }
+
+    &--amount,
+    &--total,
+    &--btn {
+      position: relative;
+    }
+
+    &--amount {
+      font-size: 1.2rem;
+      font-weight: bold;
+      top: 1.2rem;
+    }
+    &--person {
+      font-size: 0.6rem;
+      font-style: italic;
+    }
+    &--total {
+      top: -0.4rem;
+      font-size: 0.8rem;
+      // font-style: italic;
+    }
+    &--btn {
+      top: 1rem;
+      border: 0;
+      background: linear-gradient(45deg, #309c83, #78cfbb);
+      color: #fff;
+      border-radius: 3px;
+      padding: 0.8em 2.2em 0.8em 2.2em;
+    }
+  }
+}
+
+// travelers component
+
+.travelers {
+  &_title {
+    line-height: 2.3rem;
+    padding-left: 0.9rem;
+    font-size: 0.8rem;
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  &_icon--adults,
+  &_icon--children {
+    padding: 1rem;
+    padding-right: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+  &_adults,
+  &_children {
+    display: flex;
+    justify-content: space-between;
+
+    &--box {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    &--info {
+      display: flex;
+      flex-flow: column nowrap;
+      line-height: 1em;
+      padding-top: 0.7rem;
+    }
+  }
+
+  .adults_age,
+  .children_age {
+    font-size: 0.6rem;
+
+    &--price {
+      font-style: italic;
+      font-size: 0.45rem;
+      padding-left: 0.2rem;
+    }
+  }
+
+  &_adults--numbers,
+  &_children--numbers {
+    padding-left: 2rem;
+  }
+
+  &_box--sign {
+    border: 1px solid #000;
+    border-radius: 3px;
+  }
+
+  &_box--sign:hover {
+    cursor: pointer;
+  }
+
+  .travelers_box--number {
+    border: none;
+    width: 2rem;
+    padding: 0.3rem;
+    text-align: center;
+  }
+  .minus {
+    padding: 0.3em 0.7em;
+  }
+
+  .plus {
+    padding: 0.3em 0.6em;
+    margin-right: 0.8rem;
+  }
+
+  &_btn {
+    position: relative;
+    z-index: 99;
+    float: right;
+    padding: 0.6em 1.5em;
+    margin: 0.3em 1em 1.2em 1em;
+    border: 0;
+    border-radius: 3px;
+    background: linear-gradient(45deg, #309c83, #78cfbb);
+    color: #fff;
+  }
+}
+
+// Login Form
+
+.login_wrapper {
+  position: relative;
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.925),
+    rgba(199, 193, 193, 0.925)
+  );
+  border-radius: 5px;
+  padding: 0.4em 0.8em;
+  text-align: center;
+
+  .login_title {
+    font-style: italic;
+    font-weight: 600;
+    // margin-bottom: 0.8rem;
+  }
+
+  // .login_btn--google {
+  //   transition: background-color 0.3s, box-shadow 0.3s;
+
+  //   padding: 12px 16px 12px 42px;
+  //   border: none;
+  //   border-radius: 3px;
+  //   box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25);
+
+  //   color: #757575;
+  //   font-size: 14px;
+  //   font-weight: 500;
+  //   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+  //     Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  //   background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=);
+  //   background-repeat: no-repeat;
+  //   background-position: 12px 11px;
+  //   background-color: white;
+  //   &:hover {
+  //     box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25);
+  //   }
+
+  //   &:active {
+  //     background-color: #eeeeee;
+  //   }
+
+  //   &:focus {
+  //     outline: none;
+  //     box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25),
+  //       0 0 0 3px #c8dafc;
+  //   }
+
+  //   &:disabled {
+  //     filter: grayscale(100%);
+  //     background-color: #ebebeb;
+  //     box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25);
+  //     cursor: not-allowed;
+  //   }
+  // }
+
+  .login_buttons {
+    display: flex;
+    justify-content: center;
+  }
+
+  .login_btn {
+    display: flex;
+    padding: 0.7em 1.9em;
+    margin: 0.3em 1em 0.8em 1em;
+    border: 0;
+    border-radius: 3px;
+    background: linear-gradient(45deg, #309c83, #78cfbb);
+    color: #fff;
+
+    .icon_mail,
+    .icon_google {
+      padding-right: 0.5rem;
+    }
+
+    .icon_mail {
+      padding: 0 0.6em;
+    }
+  }
+
+  .signup_btn {
+    border: none;
+    background-color: transparent;
+  }
+  .no_account,
+  .signup_btn {
+    font-size: 0.7rem;
+  }
+}
+
+// LoginForm & SignupForm
+
+.login_wrapper--form {
+  .login_wrapper--title {
+    font-style: italic;
+  }
+
+  .login_wrapper--success {
+    font-size: 0.9em;
+    line-height: 1.4em;
+    padding-left: 1em;
+    margin-bottom: 1.5em;
+    display: flex;
+    justify-content: center;
+    .success_icon {
+      font-size: 2.3rem;
+      color: green;
+      padding-right: 0.4em;
+    }
+    .login_wrapper--txt,
+    .login_wrapper--mismatch {
+      padding-top: 0.3em;
+      text-align: left;
+    }
+  }
+  .login_wrapper--fail {
+    font-size: 0.7em;
+    line-height: 1.4em;
+    padding-left: 1em;
+    margin-bottom: 1.5em;
+    display: flex;
+    justify-content: center;
+    color: red;
+    .excl_icon {
+      font-size: 0.8rem;
+      color: red;
+      padding-right: 0.4em;
+    }
+  }
+  .login_input {
+    margin-bottom: 0.8em;
+    width: 90%;
+  }
+
+  .login_btn--wrapper {
+    display: flex;
+    justify-content: center;
+    // margin-top: 0.4em;
+  }
+}
