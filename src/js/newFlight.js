@@ -76,18 +76,18 @@ const NewFlight = ({
     back,
   };
 
-  console.log(data);
+  // console.log(data);
 
   // TODO
   // bothWays return set as visible but block the input
   // inputs are outside div when resizing - DONE
 
-  console.log("Origin:", origin);
-  console.log("Destination:", destination);
-  console.log("Departure:", departure);
-  console.log("Back:", back);
-  console.log("CodeFrom:", codeFrom);
-  console.log("CodeTo:", codeTo);
+  // console.log("Origin:", origin);
+  // console.log("Destination:", destination);
+  // console.log("Departure:", departure);
+  // console.log("Back:", back);
+  // console.log("CodeFrom:", codeFrom);
+  // console.log("CodeTo:", codeTo);
 
   const handleOrigin = (e) => {
     const newOrigin = e.target.value;
