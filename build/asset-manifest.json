@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.82471d39.css",
+    "main.js": "/static/js/main.40bbf3c1.js",
+    "static/js/787.accd413d.chunk.js": "/static/js/787.accd413d.chunk.js",
+    "static/media/rice_fields.jpg": "/static/media/rice_fields.0afd596b4c09dc70014b.jpg",
+    "index.html": "/index.html",
+    "main.82471d39.css.map": "/static/css/main.82471d39.css.map",
+    "main.40bbf3c1.js.map": "/static/js/main.40bbf3c1.js.map",
+    "787.accd413d.chunk.js.map": "/static/js/787.accd413d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.82471d39.css",
+    "static/js/main.40bbf3c1.js"
+  ]
+}
