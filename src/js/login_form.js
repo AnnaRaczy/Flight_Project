@@ -58,7 +58,7 @@ const Login = ({
     setSignedGoogle("googleLogin");
     // localStorage.setItem("user", JSON.stringify(user));
     localStorage.setItem("google", signedGoogle);
-    console.log("localStorage: google:", localStorage.getItem("google"));
+    // console.log("localStorage: google:", localStorage.getItem("google"));
   };
 
   const handleRegister = () => {
@@ -76,10 +76,10 @@ const Login = ({
   //   setUser(currentUser);
   // });
 
-  console.log(user);
-  console.log("CurrentUser:", auth.currentUser?.email);
-  // console.log("Login email:", loginEmail);
-  // console.log("Login psswd:", loginPsswd);
+  // console.log(user);
+  // console.log("CurrentUser:", auth.currentUser?.email);
+  // // console.log("Login email:", loginEmail);
+  // // console.log("Login psswd:", loginPsswd);
 
   return (
     <>
@@ -349,7 +349,7 @@ const SignupForm = ({
   const handleNick = (e) => {
     setNick(e.target.value);
   };
-  console.log("Nick from localStorage:", localStorage.getItem("nick"));
+  // console.log("Nick from localStorage:", localStorage.getItem("nick"));
 
   const handlePsswdFirst = (e) => {
     setPsswd1(e.target.value);

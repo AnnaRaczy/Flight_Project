@@ -1,11 +1,12 @@
-import firebase from "firebase/app";
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
 
-// TODO create vars in constants  file
+// import firebase from "firebase/app";
+// import { initializeApp } from "firebase/app";
+// import { getAuth, GoogleAuthProvider } from "firebase/auth";
+// import { getFirestore } from "firebase/firestore";
 
-const firebaseConfig = {
+// TODO create vars in constants file or even better in env variables.
+
+export const firebaseConfig = {
   apiKey: "AIzaSyAEXCYIiI4NYdR3jBy9J-40def4xRON_T8",
   authDomain: "oauth-fa471.firebaseapp.com",
   projectId: "oauth-fa471",
@@ -15,9 +16,8 @@ const firebaseConfig = {
   measurementId: "G-QWLZKB7G5Q",
 };
 
-const app = initializeApp(firebaseConfig);
-
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-
-export const provider = new GoogleAuthProvider();
+// export const app = initializeApp(firebaseConfig);
+// export const auth = getAuth(app);
+// export const db = getFirestore(app);
+//
+// export const provider = new GoogleAuthProvider();

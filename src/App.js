@@ -1,26 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { NewFlight } from "./js/newFlight";
-import { Flight } from "./js/flight";
-import { Login } from "./js/login_form";
-import { logout } from "./js/functions";
-import "./scss/main.scss";
-import { auth, db } from "./js/firebase-config";
-import { Button } from "@material-ui/core";
-import Menu from "@mui/material/Menu";
-import {
-  getAuth,
-  onAuthStateChanged,
-  updateCurrentUser,
-  updateProfile,
-} from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
-import set from "date-fns/set";
-// import { useSelector } from "react-redux";
-// import { useDispatch } from "react-redux";
-// import { log_out } from "./js/features/user";
+import Header from "./components/Header"
+import React from "react";
+import { initializeApp } from "firebase/app";
+import { AuthProvider } from "./contexts/AuthContext"
+import { firebaseConfig } from "./js/firebase-config";
 
-const authUser = getAuth();
+import "./scss/main.scss";
+
 export default function App() {
+    const app = initializeApp(firebaseConfig);
+
+    return (
+        <div>
+            <AuthProvider>
+              <Header />
+            </AuthProvider>
+        </div>
+    )
+}
+  /*
   const [flights, setFlights] = useState([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -57,11 +54,13 @@ export default function App() {
     return newUser;
   }, []);
 
-  console.log(typeof signedGoogle);
-  console.log("providerData:", user);
-  console.log("auth:", auth);
-  console.log("nick:", nick);
-  console.log("db:", db);
+
+
+  // console.log(typeof signedGoogle);
+  // console.log("providerData:", user);
+  // console.log("auth:", auth);
+  // console.log("nick:", nick);
+  // console.log("db:", db);
 
   function authHeader() {
     // returns authorization header with jwt token
@@ -73,13 +72,13 @@ export default function App() {
       return {};
     }
   }
-  console.log("Access Token:", user?.accessToken);
-  console.log("displayName:", user?.displayName);
+  // console.log("Access Token:", user?.accessToken);
+  // console.log("displayName:", user?.displayName);
   // console.log("Email:", user?.email);
   // console.log("emailVerified:", user?.emailVerified);
   // console.log("Metadata:", user?.metadata);
   // console.log("providerData:", user?.providerData);
-  console.log("uid:", user?.uid);
+  // console.log("uid:", user?.uid);
 
   const open = Boolean(anchorEl);
   const handleClick = (e) => {
@@ -100,20 +99,21 @@ export default function App() {
     // dispatch(log_out());
   };
 
-  console.log("Logged:", logged);
-  console.log("Form:", form);
-  console.log("Log:", log);
-  console.log("Register:", register);
-  console.log("User:", user);
-  console.log("Nick:", nick);
-  console.log("localStorage email:", localStorage.getItem("email"));
-  console.log("localStorage signedGoogle:", localStorage.getItem("google"));
-  console.log("signedGoogle:", signedGoogle);
+  // console.log("Logged:", logged);
+  // console.log("Form:", form);
+  // console.log("Log:", log);
+  // console.log("Register:", register);
+  // console.log("User:", user);
+  // console.log("displayName:", user?.displayName);
+  // console.log("Nick:", nick);
+  // console.log("localStorage email:", localStorage.getItem("email"));
+  // console.log("localStorage signedGoogle:", localStorage.getItem("google"));
+  // console.log("signedGoogle:", signedGoogle);
 
   const handleAdd = (data) => {
     setFlights(Object.entries(data));
-    console.log("data:", Object.entries(data));
-    console.log("is data.length === 0?:", Object.entries(data).length === 0);
+    // console.log("data:", Object.entries(data));
+    // console.log("is data.length === 0?:", Object.entries(data).length === 0);
     // Object.entries(data).length === 0 ? setResult(false) : setResult(true);
   };
 
@@ -122,9 +122,9 @@ export default function App() {
     setTo(destination);
     setData(result);
 
-    console.log("From:", from);
-    console.log("To:", to);
-    console.log("Result:", result);
+    // console.log("From:", from);
+    // console.log("To:", to);
+    // console.log("Result:", result);
   };
 
   const handleTravelers = (adults, children) => {
@@ -140,8 +140,8 @@ export default function App() {
 
   const handleStorage = () => {};
 
-  console.log("Adults:", adultsPas);
-  console.log("Children:", childrenPas);
+  // console.log("Adults:", adultsPas);
+  // console.log("Children:", childrenPas);
 
   return (
     <div>
@@ -158,7 +158,7 @@ export default function App() {
               autoFocus={false}
             >
               <span onClick={handleLogin}>{logged ? "Log Out" : "Log In"}</span>
-              {/* {form ? "Log Out" : "Log In"}  */}
+              { {form ? "Log Out" : "Log In"}  }
             </Button>
             <Menu
               id="demo-positioned-menuLog"
@@ -190,7 +190,6 @@ export default function App() {
                 nick={nick}
                 setNick={setNick}
                 signedGoogle={signedGoogle}
-                signedGoogle={signedGoogle}
                 setSignedGoogle={setSignedGoogle}
                 authUser={authUser}
               />
@@ -200,12 +199,12 @@ export default function App() {
         {logged && (
           <>
             <span>
-              {/* {signedGoogle !== "googleLogin" ? ( */}
+              { {signedGoogle !== "googleLogin" ? ( }
               {user?.displayName !== null ? (
                 <h1>
                   <span className="header_greet">Hello</span>{" "}
                   <span className="header_name">{user?.displayName}</span>
-                  {/* <span className="header_name">{user.nick}</span> */}
+                  { <span className="header_name">{user.nick}</span>}
                 </h1>
               ) : (
                 <h1>
@@ -226,7 +225,7 @@ export default function App() {
             >
               My flights
             </button>
-            {/* {user !== null && <h1>Hello {user.email}</h1>} */}
+            {{user !== null && <h1>Hello {user.email}</h1>}}
             <button
               className="header_btn header_btn--sign"
               onClick={handleLogout}
@@ -249,7 +248,7 @@ export default function App() {
         <ul>
           {flights !== null &&
             flights.map((item, id) => {
-              console.log("items:", { ...item });
+              // console.log("items:", { ...item });
               return (
                 <Flight
                   key={id}
@@ -279,3 +278,4 @@ export { App };
 //   rgba(255, 255, 255, 0.925),
 //   rgba(199, 193, 193, 0.233)
 // );
+*/
