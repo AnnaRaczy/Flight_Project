@@ -1,20 +1,31 @@
 import { useAuth } from "../contexts/AuthContext"
-import { SignupButton } from "./Signup"
-
-function Login() {
-    return <SignupButton />
-}
-
-function Logged() {
-   return <span>User is logged in.</span>
-}
+import { LoginButton } from "./Login"
+import { Button } from "@material-ui/core"
 
 function HeaderContent() {
-    const { currentUser } = useAuth()
-    if (currentUser === null) {
-        return <Login />
+    const { currentUser, signUserOut } = useAuth()
+
+    function handleSignOut(e) {
+        signUserOut()
     }
-    return <Logged />
+
+    if (currentUser === null) {
+        return <LoginButton />
+    }
+    console.log(currentUser)
+    return (
+        <span>
+            Hello {currentUser.displayName}
+            <Button
+              id="demo-positioned-buttonLog"
+              className="MuiButton-text-login"
+              onClick={handleSignOut}
+              autoFocus={false}
+            >
+                <span>Log Out</span>
+            </Button>
+        </span>
+    )
 }
 
 export default function Header() {
