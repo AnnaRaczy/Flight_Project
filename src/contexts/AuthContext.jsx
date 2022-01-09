@@ -1,7 +1,7 @@
 // This entire thing was inspired (i.e. copy-pasted) from:
 // https://stackoverflow.com/questions/68104551/react-firebase-authentication-and-usecontext
 import { createContext, useContext, useEffect, useState } from 'react'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, onAuthStateChanged,  } from "firebase/auth";
 
 // Context is something that is shared between all components. Thanks to this
 // we do not need to keep the authentication in a state in the main component
@@ -20,36 +20,35 @@ export function AuthProvider({ children }) {
     async function logUserIn(email, password) {
         const auth = getAuth()
         await signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                setCurrentUser(userCredential.user)
-            })
             .catch((error) => {
-                console.log(error.code, error.message)
+                throw error
             });
-        return currentUser
+    }
+
+    async function logUserInWithGoogle() {
+        const auth = getAuth()
+        const provider = new GoogleAuthProvider()
+
+        await signInWithPopup(auth, provider)
+            .catch((error) => {
+                throw error
+            })
     }
 
     async function signUserOut() {
         const auth = getAuth()
         await signOut(auth)
-            .then(() => {
-                return true
-            }).catch((error) => {
-                console.log(error.code, error.message)
-                return false
+            .catch((error) => {
+                throw error
             })
     }
 
     async function signUserUp(email, password) {
         const auth = getAuth()
         await createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                setCurrentUser(userCredential)
-            })
             .catch((error) => {
                 throw error
             });
-        return currentUser
     }
 
     function getUser() {
@@ -70,6 +69,7 @@ export function AuthProvider({ children }) {
         currentUser,
         getUser,
         logUserIn,
+        logUserInWithGoogle,
         signUserOut,
         signUserUp
     }

@@ -7,12 +7,13 @@ import { firebaseConfig } from "./js/firebase-config";
 import "./scss/main.scss";
 
 export default function App() {
-    const app = initializeApp(firebaseConfig);
+    // Initialize Firebase with config.
+    initializeApp(firebaseConfig);
 
     return (
         <div>
             <AuthProvider>
-              <Header />
+                <Header />
             </AuthProvider>
         </div>
     )
