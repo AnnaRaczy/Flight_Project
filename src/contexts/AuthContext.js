@@ -17,11 +17,11 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
 
-    function logUserIn(email, password) {
+    async function logUserIn(email, password) {
         const auth = getAuth()
-        signInWithEmailAndPassword(auth, email, password)
+        await signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                setCurrentUser(userCredential)
+                setCurrentUser(userCredential.user)
             })
             .catch((error) => {
                 console.log(error.code, error.message)
@@ -29,14 +29,15 @@ export function AuthProvider({ children }) {
         return currentUser
     }
 
-    function signUserOut() {
+    async function signUserOut() {
         const auth = getAuth()
-        signOut(auth).then(() => {
-            return true
-        }).catch((error) => {
-            console.log(error.code, error.message)
-            return false
-        })
+        await signOut(auth)
+            .then(() => {
+                return true
+            }).catch((error) => {
+                console.log(error.code, error.message)
+                return false
+            })
     }
 
     async function signUserUp(email, password) {
