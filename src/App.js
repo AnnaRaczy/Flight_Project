@@ -3,6 +3,7 @@ import React from "react";
 import { initializeApp } from "firebase/app";
 import { AuthProvider } from "./contexts/AuthContext"
 import { firebaseConfig } from "./js/firebase-config";
+import { NewFlight } from "./js/newFlight"
 
 import "./scss/main.scss";
 
@@ -14,6 +15,13 @@ export default function App() {
         <div>
             <AuthProvider>
                 <Header />
+                <NewFlight
+                  onAdd={() => {}}
+                  onChange={() => {}}
+                  adults="1"
+                  children="0"
+                  setAdults={() => {}}
+                  setChildren={() => {}} />
             </AuthProvider>
         </div>
     )
