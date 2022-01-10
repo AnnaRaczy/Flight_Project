@@ -6,20 +6,59 @@ import {
   Card,
   CardHeader,
   CardContent,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   TextField,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
+import GoogleIcon from '@mui/icons-material/Google'
 import { Login } from "./Login";
 import { Signup } from "./Signup";
 
-export function LoginEmail({ isComponentVisible, setIsComponentVisible }) {
-  const handleLogin = () => {
-    setIsComponentVisible(false);
-  };
+function LoginForm({ open, onClose }) {
+  const { logUserIn } = useAuth()
+
+  function handleForm(e) {
+    console.log(e.target)
+  }
+
+  return (
+    <div>
+      {open && <Card>
+        <CardHeader title="Continue to your account" />
+        <CardContent>
+          <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Email Address"
+              type="email"
+              fullWidth
+              variant="standard"
+              onChange={ handleForm }
+          />
+          <TextField
+              margin="dense"
+              id="password"
+              label="Password"
+              type="password"
+              fullWidth
+              variant="standard"
+              onChange={ handleForm }
+          />
+        </CardContent>
+      </Card>}
+    </div>
+  )
+}
+
+export function LoginEmail({ onClick }) {
   return (
     <div className="login_buttons">
-      <button className="login_btn login_btn--email" onClick={handleLogin}>
-        <div>
+      <button className="login_btn login_btn--email"  onClick={onClick}>
+        <div id="loginEmailButton">
           <i className="fas fa-envelope icon_mail"></i>
         </div>
         <div>Email</div>
@@ -28,10 +67,13 @@ export function LoginEmail({ isComponentVisible, setIsComponentVisible }) {
   );
 }
 
-export function LoginGoogle({ isComponentVisible, setIsComponentVisible }) {
+export function LoginGoogle() {
+  const { logUserInWithGoogle } = useAuth()
+
   const handleLoginGoogle = () => {
-    setIsComponentVisible(false);
+    logUserInWithGoogle()
   };
+
   return (
     <div className="login_buttons">
       <button
@@ -61,47 +103,60 @@ export function Register({ isComponentVisible, setIsComponentVisible }) {
   );
 }
 
-export function LoginCard() {
-  const { ref, isComponentVisible, setIsComponentVisible } =
-    useVisibleComponent(false);
+export function LoginCard({ open, onClose }) {
+  const [openLoginForm, setOpenLoginForm] = useState(false)
 
-  const handleRegister = (e) => {};
-  const handleBack = () => {};
+  const onLoginClick = () => {
+    setOpenLoginForm(true)
+    onClose()
+  }
 
+  const onLoginClose = () => {
+    setOpenLoginForm(false)
+  }
   return (
     <div>
-      <Card className="login_wrapper">
-        <CardHeader title="Continue to your account" />
-        <CardContent>
-          <LoginEmail setIsComponentVisible={setIsComponentVisible} />
-          <LoginGoogle setIsComponentVisible={setIsComponentVisible} />
-          <Register setIsComponentVisible={setIsComponentVisible} />
-        </CardContent>
-      </Card>
+      <Dialog open={open} onClose={onClose} className="login_wrapper">
+        <DialogTitle>Hello</DialogTitle>
+        <DialogContent>
+          <LoginEmail onClick={onLoginClick} />
+          <LoginGoogle/>
+          <Register/>
+        </DialogContent>
+      </Dialog>
+      <LoginForm open={openLoginForm} onClose={onLoginClose} />
     </div>
   );
 }
 
+export function LogButton({label, onClick}) {
+  return (
+    <Button
+      id="demo-positioned-buttonLog"
+      className="MuiButton-text-login"
+      onClick={onClick}
+      autoFocus={false}
+    >
+      <span>{label}</span>
+    </Button>
+  )
+}
+
 export function LoginButton() {
-  const { currentUser } = useAuth();
-  const { ref, isComponentVisible, setIsComponentVisible } =
-    useVisibleComponent(false);
+  const [open, setOpen] = useState(false)
 
   const handleClick = () => {
-    setIsComponentVisible(true);
+    setOpen(true)
   };
+
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   return (
     <div>
-      <Button
-        id="demo-positioned-buttonLog"
-        className="MuiButton-text-login"
-        onClick={handleClick}
-        autoFocus={false}
-      >
-        <span>Log In</span>
-      </Button>
-      <div ref={ref}>{isComponentVisible && <LoginCard />}</div>
+      <LogButton label="Log In" onClick={handleClick} />
+      <LoginCard open={open} onClose={handleClose} />
     </div>
   );
 }
