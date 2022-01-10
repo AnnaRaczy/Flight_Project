@@ -1,7 +1,7 @@
 // This entire thing was inspired (i.e. copy-pasted) from:
 // https://stackoverflow.com/questions/68104551/react-firebase-authentication-and-usecontext
 import { createContext, useContext, useEffect, useState } from 'react'
-import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, onAuthStateChanged,  } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, onAuthStateChanged, updateProfile,  } from "firebase/auth";
 
 // Context is something that is shared between all components. Thanks to this
 // we do not need to keep the authentication in a state in the main component
@@ -43,9 +43,14 @@ export function AuthProvider({ children }) {
             })
     }
 
-    async function signUserUp(email, password) {
+    async function signUserUp(name, email, password) {
         const auth = getAuth()
         await createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                await updateProfile(auth.currentUser, {
+                    displayName: name
+                })
+            })
             .catch((error) => {
                 throw error
             });
