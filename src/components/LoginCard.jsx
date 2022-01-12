@@ -1,25 +1,24 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import useVisibleComponent from "../hooks/Visible";
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardContent,
-  TextField,
-  Typography,
-} from "@material-ui/core";
-import { Login } from "./Login";
-import { Signup } from "./Signup";
+import { Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
+// import GoogleIcon from "@mui/icons-material/Google";
+import { LoginForm } from "./Login";
+import { SignupForm } from "./Signup";
 
-export function LoginEmail({ isComponentVisible, setIsComponentVisible }) {
-  const handleLogin = () => {
-    setIsComponentVisible(false);
-  };
+export function BackBtn({ fn }) {
+  return (
+    <button className="signup_btn" onClick={fn}>
+      <u>Back</u>
+    </button>
+  );
+}
+
+export function LoginEmail({ onClick }) {
   return (
     <div className="login_buttons">
-      <button className="login_btn login_btn--email" onClick={handleLogin}>
-        <div>
+      <button className="login_btn login_btn--email" onClick={onClick}>
+        <div id="loginEmailButton">
           <i className="fas fa-envelope icon_mail"></i>
         </div>
         <div>Email</div>
@@ -28,16 +27,10 @@ export function LoginEmail({ isComponentVisible, setIsComponentVisible }) {
   );
 }
 
-export function LoginGoogle({ isComponentVisible, setIsComponentVisible }) {
-  const handleLoginGoogle = () => {
-    setIsComponentVisible(false);
-  };
+export function LoginGoogle({ onClick }) {
   return (
     <div className="login_buttons">
-      <button
-        className=" login_btn login_btn--google"
-        onClick={handleLoginGoogle}
-      >
+      <button className=" login_btn login_btn--google" onClick={onClick}>
         <div>
           <i className="fab fa-google icon_google"></i>
         </div>
@@ -47,209 +40,101 @@ export function LoginGoogle({ isComponentVisible, setIsComponentVisible }) {
   );
 }
 
-export function Register({ isComponentVisible, setIsComponentVisible }) {
-  const handleRegister = () => {
-    setIsComponentVisible(false);
-  };
+export function Register({ onClick }) {
   return (
     <div>
       <span className="no_account">Don't have an account?</span>{" "}
-      <button className="signup_btn" onClick={handleRegister}>
+      <button className="signup_btn" onClick={onClick}>
         <u>Sign up</u>
       </button>
     </div>
   );
 }
 
-export function LoginCard() {
-  const { ref, isComponentVisible, setIsComponentVisible } =
-    useVisibleComponent(false);
+export function LoginCard({ open, setOpen, onClose }) {
+  const [openLoginForm, setOpenLoginForm] = useState(false);
+  const [openRegForm, setOpenRegForm] = useState(false);
+  const { logUserInGoogle } = useAuth();
 
-  const handleRegister = (e) => {};
-  const handleBack = () => {};
+  const onLoginClick = () => {
+    setOpenLoginForm(true);
+    onClose();
+  };
 
-  return (
-    <div>
-      <Card className="login_wrapper">
-        <CardHeader title="Continue to your account" />
-        <CardContent>
-          <LoginEmail setIsComponentVisible={setIsComponentVisible} />
-          <LoginGoogle setIsComponentVisible={setIsComponentVisible} />
-          <Register setIsComponentVisible={setIsComponentVisible} />
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
+  const onGoogleClick = () => {
+    logUserInGoogle();
+    onClose();
+  };
 
-export function LoginButton() {
-  const { currentUser } = useAuth();
-  const { ref, isComponentVisible, setIsComponentVisible } =
-    useVisibleComponent(false);
+  const onRegClick = () => {
+    setOpenRegForm(true);
+    onClose();
+  };
 
-  const handleClick = () => {
-    setIsComponentVisible(true);
+  const onLoginClose = () => {
+    setOpenLoginForm(false);
+  };
+
+  const onRegClose = () => {
+    setOpenRegForm(false);
   };
 
   return (
     <div>
-      <Button
-        id="demo-positioned-buttonLog"
-        className="MuiButton-text-login"
-        onClick={handleClick}
-        autoFocus={false}
-      >
-        <span>Log In</span>
-      </Button>
-      <div ref={ref}>{isComponentVisible && <LoginCard />}</div>
+      <Dialog open={open} onClose={onClose} className="login_wrapper">
+        <DialogTitle>Hello</DialogTitle>
+        <DialogContent>
+          <LoginEmail onClick={onLoginClick} />
+          <LoginGoogle onClick={onGoogleClick} />
+          <Register onClick={onRegClick} />
+        </DialogContent>
+      </Dialog>
+      <LoginForm
+        visible={openLoginForm}
+        setOpen={setOpen}
+        setOpenLoginForm={setOpenLoginForm}
+        onClose={onLoginClose}
+        BackBtn={BackBtn}
+      />
+      <SignupForm
+        visible={openRegForm}
+        setOpen={setOpen}
+        setOpenRegForm={setOpenRegForm}
+        onClose={onRegClose}
+        BackBtn={BackBtn}
+      />
     </div>
   );
 }
 
-{
-  /* <span className="no_account">Don't have an account?</span>{" "}
-            <button className="signup_btn" onClick={handleRegister}>
-              <u>Sign up</u>
-            </button> */
+export function LogButton({ label, onClick }) {
+  return (
+    <Button
+      id="demo-positioned-buttonLog"
+      className="MuiButton-text-login"
+      onClick={onClick}
+      autoFocus={false}
+    >
+      <span>{label}</span>
+    </Button>
+  );
 }
 
-// import { SignupForm } from "./Signup"
-// import { useState } from "react"
-// import { useAuth } from "../contexts/AuthContext"
+export function LoginButton() {
+  const [open, setOpen] = useState(false);
 
-// import Alert from '@mui/material/Alert'
-// import Button from '@mui/material/Button'
-// import Dialog from '@mui/material/Dialog'
-// import DialogActions from '@mui/material/DialogActions'
-// import DialogContent from '@mui/material/DialogContent'
-// import DialogTitle from '@mui/material/DialogTitle'
-// import GoogleIcon from '@mui/icons-material/Google'
-// import Snackbar from '@mui/material/Snackbar'
-// import TextField from '@mui/material/TextField'
+  const handleClick = () => {
+    setOpen(true);
+  };
 
-// // A component responsible for displaying a login form. The form contains two possibilities (email + password
-// // and Google's OAuth2). In addition it allows users to create an account with the app.
-// function LoginForm(props) {
-//     const { open, handleClose } = props
-//     const [state, setState] = useState({
-//         "name": "",
-//         "password": ""
-//     })
-//     const [openSignup, setOpenSignup] = useState(false)
-//     const [error, setError] = useState()
-//     const { logUserIn, logUserInWithGoogle } = useAuth()
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-//     function handleForm(e) {
-//         setState({
-//             ...state,
-//             [e.target.id]: e.target.value
-//         })
-//     }
-
-//     function handleSignup() {
-//         handleClose()
-//         setOpenSignup(true)
-//     }
-
-//     function handleCloseSignup() {
-//         setOpenSignup(false)
-//     }
-
-//     async function handleEmailLogin(e) {
-//         await logUserIn(state.name, state.password)
-//             .catch(err => {
-//                 if (err.code === "auth/wrong-password") {
-//                     setError("Invalid password provided!")
-//                 }
-//             })
-//         handleClose()
-//     }
-
-//     async function handleGoogleLogin(e) {
-//         await logUserInWithGoogle()
-//             .catch(err => setError(err.code))
-//         handleClose()
-//     }
-
-//     return (
-//         <div>
-//             <Dialog open={open} onClose={ handleClose }>
-//                 <DialogTitle>Log In</DialogTitle>
-//                 <DialogContent>
-//                     <TextField
-//                         autoFocus
-//                         margin="dense"
-//                         id="name"
-//                         label="Email Address"
-//                         type="email"
-//                         fullWidth
-//                         variant="standard"
-//                         onChange={ handleForm }
-//                     />
-//                     <TextField
-//                         margin="dense"
-//                         id="password"
-//                         label="Password"
-//                         type="password"
-//                         fullWidth
-//                         variant="standard"
-//                         onChange={ handleForm }
-//                     />
-//                     <Button onClick={ handleGoogleLogin } startIcon={<GoogleIcon />} fullWidth>Log In with Google</Button>
-//                 </DialogContent>
-//                 <DialogActions>
-//                     <Button onClick={ handleSignup }>Sign Up</Button>
-//                     <Button onClick={ handleClose }>Cancel</Button>
-//                     <Button onClick={ handleEmailLogin }>Log In</Button>
-//                 </DialogActions>
-//             </Dialog>
-//             <SignupForm open={openSignup} handleClose={handleCloseSignup} />
-//             {error && (
-//                 <Snackbar open={true} autoHideDuration={6000} onClose={() => {setError()}} anchorOrigin={{ horizontal: "center", vertical: "top"}}>
-//                     <Alert onClose={() => {setError()}} severity="error" sx={{ width: '100%' }}>
-//                         {error}
-//                     </Alert>
-//                 </Snackbar>
-//             )}
-//         </div>
-//     )
-// }
-
-// // A component responsible for logging in and signing up users.
-// export function Login() {
-//     const { currentUser, signUserOut } = useAuth()
-//     const [open, setOpen] = useState(false)
-//     const buttonLabel = currentUser ? "Log Out" : "Log In"
-
-//     function handleClose() {
-//         setOpen(false)
-//     }
-
-//     // If user is logged in, clicking on the button will log that user out, and if they're not, it will
-//     // show the login form instead.
-//     function handleClick() {
-//         if (currentUser) {
-//             signUserOut()
-//         } else {
-//             setOpen(true)
-//         }
-//     }
-
-//     // Get a name to be displayed. If `currentUser` is not defined, the display name will be too and as a
-//     // result the entire `Hello <name>` block will be omitted.
-//     const displayName = currentUser?.displayName ? currentUser.displayName : currentUser?.email
-//     return(
-//         <div>
-//             {displayName && <span className="header_name">Hello {displayName}</span>}
-//             <Button
-//                 id="demo-positioned-buttonLog"
-//                 className="MuiButton-text-login"
-//                 onClick={handleClick}
-//                 autoFocus={false}
-//             >
-//                 <span>{buttonLabel}</span>
-//             </Button>
-//             <LoginForm open={open} handleClose={handleClose} />
-//       </div>
-//     )
-// }
+  return (
+    <div>
+      <LogButton label="Log In" onClick={handleClick} />
+      <LoginCard open={open} setOpen={setOpen} onClose={handleClose} />
+    </div>
+  );
+}

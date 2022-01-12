@@ -4,14 +4,41 @@ import useVisibleComponent from "../hooks/Visible";
 
 import {
   Button,
-  Card,
-  CardHeader,
-  CardContent,
+  Dialog,
+  DialogTitle,
+  DialogContent,
   TextField,
   Typography,
 } from "@material-ui/core";
 
-export function SignupForm() {
+export function TextInput({ fn, label, name, type }) {
+  return (
+    <TextField
+      className="selections_all--inputs login_input"
+      variant="outlined"
+      onChange={fn}
+      label={label}
+      name={name}
+      type={type}
+    />
+  );
+}
+
+const SignupBtn = ({ fn }) => {
+  return (
+    <Button className="login_btn" onClick={fn}>
+      <Typography variant="button">Create Account</Typography>
+    </Button>
+  );
+};
+
+export function SignupForm({
+  visible,
+  setOpen,
+  onClose,
+  setOpenRegForm,
+  BackBtn,
+}) {
   const { signUserUp } = useAuth();
   const [state, setState] = useState({
     name: "",
@@ -31,81 +58,75 @@ export function SignupForm() {
     if (state.password !== state.passwordConfirm) {
       console.log("Passwords do not match");
     }
-    signUserUp(state.email, state.password).catch((err) =>
+    signUserUp(state.name, state.email, state.password).catch((err) =>
       console.log(JSON.stringify(err))
     ); // Handle errors here.
   };
 
-  const handleBack = () => {};
-
-  return (
-    <div>
-      <Card className="login_wrapper login_wrapper--form">
-        <CardHeader title="Sign up" />
-        <CardContent>
-          <TextField
-            className="selections_all--inputs login_input"
-            label="Name..."
-            name="name"
-            variant="outlined"
-            onChange={handleForm}
-          />
-          <TextField
-            className="selections_all--inputs login_input"
-            label="Email..."
-            name="email"
-            variant="outlined"
-            onChange={handleForm}
-          />
-          <TextField
-            className="selections_all--inputs login_input"
-            label="Password..."
-            name="password"
-            type="password"
-            variant="outlined"
-            onChange={handleForm}
-          />
-          <TextField
-            className="selections_all--inputs login_input"
-            label="Password Confirmation..."
-            name="passwordConfirm"
-            type="password"
-            variant="outlined"
-            onChange={handleForm}
-          />
-          <Button className="login_btn" onClick={handleSubmit}>
-            <Typography variant="button">Create Account</Typography>
-          </Button>
-          <button className="signup_btn" onClick={handleBack}>
-            <u>Back</u>
-          </button>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-export function SignupButton() {
-  const { currentUser } = useAuth();
-  const logged = currentUser !== null;
-  const { ref, isComponentVisible, setIsComponentVisible } =
-    useVisibleComponent(false);
-
-  const handleClick = () => {
-    setIsComponentVisible(true);
+  const handleBack = () => {
+    setOpen(true);
+    setOpenRegForm(false);
   };
 
   return (
     <div>
-      <Button
-        id="demo-positioned-buttonLog"
-        className="MuiButton-text-login"
-        onClick={handleClick}
-        autoFocus={false}
+      <Dialog
+        open={visible}
+        onClose={onClose}
+        className="login_wrapper login_wrapper--form"
       >
-        <span>{logged ? "Log Out" : "Sign Up"}</span>
-      </Button>
-      <div ref={ref}>{isComponentVisible && <SignupForm />}</div>
+        <DialogTitle className="Header">Sign up</DialogTitle>
+        <DialogContent>
+          <TextInput label="Name..." name="name" type="text" fn={handleForm} />
+          <TextInput
+            label="Email..."
+            name="email"
+            type="text"
+            fn={handleForm}
+          />
+          <TextInput
+            label="Password..."
+            name="password"
+            type="password"
+            fn={handleForm}
+          />
+          <TextInput
+            label="Password Confirmation..."
+            name="passwordConfirm"
+            type="password"
+            fn={handleForm}
+          />
+          <div className="login_btn--wrapper">
+            <SignupBtn fn={handleSubmit} />
+            <BackBtn fn={handleBack} />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
+
+// export function SignupButton() {
+//   const { currentUser } = useAuth();
+//   const logged = currentUser !== null;
+//   const { ref, isComponentVisible, setIsComponentVisible } =
+//     useVisibleComponent(false);
+
+//   const handleClick = () => {
+//     setIsComponentVisible(true);
+//   };
+
+//   return (
+//     <div>
+//       <Button
+//         id="demo-positioned-buttonLog"
+//         className="MuiButton-text-login"
+//         onClick={handleClick}
+//         autoFocus={false}
+//       >
+//         <span>{logged ? "Log Out" : "Sign Up"}</span>
+//       </Button>
+//       <div ref={ref}>{isComponentVisible && <SignupForm />}</div>
+//     </div>
+//   );
+// }
