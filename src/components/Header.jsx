@@ -2,6 +2,19 @@ import { useAuth } from "../contexts/AuthContext";
 import { LoginButton } from "./LoginCard";
 import { Button } from "@material-ui/core";
 
+function HeaderBtn({ fn, label }) {
+  return (
+    <Button
+      // id="demo-positioned-buttonLog"
+      className="MuiButton-text-login"
+      onClick={fn}
+      autoFocus={false}
+    >
+      <span>{label}</span>
+    </Button>
+  );
+}
+
 function HeaderContent() {
   const { currentUser, signUserOut } = useAuth();
 
@@ -21,22 +34,8 @@ function HeaderContent() {
   return (
     <span>
       Hello {currentUser.displayName}
-      <Button
-        // className="header_btn header_btn--sign"
-        className="MuiButton-text-login"
-        onClick={handleStorage}
-        autoFocus={false}
-      >
-        <span>My flights</span>
-      </Button>
-      <Button
-        id="demo-positioned-buttonLog"
-        className="MuiButton-text-login"
-        onClick={handleSignOut}
-        autoFocus={false}
-      >
-        <span>Log Out</span>
-      </Button>
+      <HeaderBtn fn={handleStorage} label="My flights" />
+      <HeaderBtn fn={handleSignOut} label="Log out" />
     </span>
   );
 }

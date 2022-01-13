@@ -105,28 +105,3 @@ export function SignupForm({
     </div>
   );
 }
-
-// export function SignupButton() {
-//   const { currentUser } = useAuth();
-//   const logged = currentUser !== null;
-//   const { ref, isComponentVisible, setIsComponentVisible } =
-//     useVisibleComponent(false);
-
-//   const handleClick = () => {
-//     setIsComponentVisible(true);
-//   };
-
-//   return (
-//     <div>
-//       <Button
-//         id="demo-positioned-buttonLog"
-//         className="MuiButton-text-login"
-//         onClick={handleClick}
-//         autoFocus={false}
-//       >
-//         <span>{logged ? "Log Out" : "Sign Up"}</span>
-//       </Button>
-//       <div ref={ref}>{isComponentVisible && <SignupForm />}</div>
-//     </div>
-//   );
-// }
