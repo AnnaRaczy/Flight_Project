@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { FlightsWrapper } from "./FlightOutput";
 import { FlightsPrice } from "./FlightPrice";
 import airlines from "../airlines.json";
-import { addHours, format } from "date-fns";
+// import { addHours, format } from "date-fns";
+import { getHourBack } from "../js/functions";
 
 const FlightsInfo = ({ data, getAirline }) => {
   return (
@@ -16,22 +17,25 @@ const FlightsInfo = ({ data, getAirline }) => {
     </div>
   );
 };
-const Flight = (data) => {
-  const [checkedFrom, setCheckedFrom] = useState(false);
-  const [checkedTo, setCheckedTo] = useState(true);
+const Flight = (data, onClick) => {
+  const [checked, setChecked] = useState(false);
+  const [myFlights, setMyFlights] = useState([]);
 
   function CheckboxStyled() {
+    const handleCheck = (e) => {
+      setChecked(e.target.checked);
+      setMyFlights(data);
+      onClick(data);
+    };
     return (
       <div>
-        <Checkbox
-          checked={checkedFrom}
-          onChange={(e) => setCheckedFrom(e.target.checked)}
-        />
+        <Checkbox checked={checked} onChange={handleCheck} />
       </div>
     );
   }
   console.log("Data:", data);
-  console.log("From, to:", data.inputFrom, data.inputTo);
+  console.log("FlightsList:", myFlights);
+  // console.log("From, to:", data.inputFrom, data.inputTo);
 
   const getAirline = (data, input) => {
     const airline = data
@@ -41,15 +45,18 @@ const Flight = (data) => {
     return airline;
   };
 
-  const getHourBack = (elem) => {
-    const hourBack = Date.parse(`${elem}`);
-    const newHour = addHours(hourBack, 4);
-    return format(newHour.getTime(), "HH:mm");
-  };
+  // const getHourBack = (elem) => {
+  //   const hourBack = Date.parse(`${elem}`);
+  //   const newHour = addHours(hourBack, 4);
+  //   return format(newHour.getTime(), "HH:mm");
+  // };
 
   return (
     <>
       <div className="container wrapper">
+        <span className="flights_checkboxes">
+          <CheckboxStyled />
+        </span>
         <FlightsWrapper
           data={data}
           CheckboxStyled={CheckboxStyled}

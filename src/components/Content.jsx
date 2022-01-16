@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NewFlight from "./NewFlight";
 import Flight from "./Flight";
+import { MyFlights } from "./MyFlights";
 import "../scss/main.scss";
 // import { auth, db } from "../js/firebase-config";
 import { Button } from "@material-ui/core";
@@ -20,7 +21,7 @@ const EmptyData = ({ data }) => {
   return data === false && <NoFlights />;
 };
 
-const FlightsList = ({ flights, from, to, adults, children }) => {
+const FlightsList = ({ flights, from, to, adults, children, onClick }) => {
   return (
     <ul>
       {flights !== null &&
@@ -34,6 +35,7 @@ const FlightsList = ({ flights, from, to, adults, children }) => {
               inputTo={to}
               adults={adults}
               children={children}
+              onClick={onClick}
             />
           );
         })}
@@ -41,7 +43,7 @@ const FlightsList = ({ flights, from, to, adults, children }) => {
   );
 };
 
-const Content = () => {
+const Content = ({ main }) => {
   const authUser = getAuth();
   const [flights, setFlights] = useState([]);
   const [from, setFrom] = useState("");
@@ -51,8 +53,8 @@ const Content = () => {
     adults: 1,
     children: 0,
   });
-  const [users, setUsers] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [savedFlights, setSavedFlights] = useState([]);
 
   const open = Boolean(anchorEl);
   const handleClick = (e) => {
@@ -75,24 +77,41 @@ const Content = () => {
     setData(result);
   };
 
-  console.log(passengers);
+  console.log("Content From:", from);
+  console.log("Content To:", to);
+  console.log("Flights:", flights);
 
+  const handleMyFlights = (myFlights) => {
+    setSavedFlights(myFlights);
+  };
   return (
     <div>
-      <NewFlight
-        onAdd={handleAdd}
-        onChange={handleInputs}
-        passengers={passengers}
-        setPassengers={setPassengers}
-      />
-      <FlightsList
-        flights={flights}
-        from={from}
-        to={to}
-        adults={passengers.adults}
-        children={passengers.children}
-      />
-      <EmptyData data={data} />
+      {!main && (
+        <>
+          <MyFlights savedFlights={savedFlights} />
+        </>
+      )}
+      {main && (
+        <>
+          <NewFlight
+            onAdd={handleAdd}
+            onChange={handleInputs}
+            passengers={passengers}
+            setPassengers={setPassengers}
+            setFlights={setFlights}
+            setData={setData}
+          />
+          <FlightsList
+            flights={flights}
+            from={from}
+            to={to}
+            adults={passengers.adults}
+            children={passengers.children}
+            onClick={handleMyFlights}
+          />
+          <EmptyData data={data} />
+        </>
+      )}
     </div>
   );
 };

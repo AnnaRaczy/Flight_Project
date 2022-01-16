@@ -6,6 +6,8 @@ import Form from "./Form";
 import iata from "../iata.json";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
+import { Alert, CustomizedSnackbar } from "./Snackbars";
+import { InputsError } from "./Error";
 
 const Title = () => {
   return <h1 className="title">Start your next journey...</h1>;
@@ -21,7 +23,22 @@ const Selections = ({ handleBoth, handleOne, passengers, setPassengers }) => {
   );
 };
 
-const NewFlight = ({ onAdd, onChange, passengers, setPassengers }) => {
+const BtnSubmit = ({ ButtonStyled }) => {
+  return (
+    <div className="search_box">
+      <ButtonStyled />
+    </div>
+  );
+};
+
+const NewFlight = ({
+  onAdd,
+  onChange,
+  passengers,
+  setPassengers,
+  setFlights,
+  setData,
+}) => {
   const [bothWays, setBothWays] = useState("both_ways");
   const [codeFrom, setCodeFrom] = useState("");
   const [codeTo, setCodeTo] = useState("");
@@ -32,14 +49,7 @@ const NewFlight = ({ onAdd, onChange, passengers, setPassengers }) => {
     departure: "",
     back: "",
   });
-
-  const getCode = (data, input, fn) => {
-    const code = data
-      .filter((item) => item.city === input)
-      .map((item) => item.code)
-      .toString();
-    return fn(code);
-  };
+  const [error, setError] = useState(false);
 
   const handleBoth = () => {
     setBothWays("both_ways");
@@ -62,25 +72,35 @@ const NewFlight = ({ onAdd, onChange, passengers, setPassengers }) => {
   function ButtonStyled() {
     const classes = styles();
     return (
-      <Button className={classes.root} onClick={handleSubmit}>
-        Search <i className="fas fa-arrow-right"></i>
-      </Button>
+      <div className="search_box">
+        <Button className={classes.root} onClick={handleSubmit}>
+          Search <i className="fas fa-arrow-right"></i>
+        </Button>
+      </div>
     );
   }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    getCode(iata, inputs.origin, setCodeFrom);
-    getCode(iata, inputs.destination, setCodeTo);
-    getFlights(
-      codeTo,
-      codeFrom,
-      inputs.departure,
-      inputs.back,
-      onAdd,
-      setResult
-    );
-    onChange(inputs.origin, inputs.destination, result);
+    setData(true);
+    if (InputsError(codeTo, codeFrom, inputs.departure, inputs.back)) {
+      setError(true);
+      setFlights(null);
+    } else {
+      getFlights(
+        codeTo,
+        codeFrom,
+        inputs.departure,
+        inputs.back,
+        onAdd,
+        setResult
+      );
+      onChange(inputs.origin, inputs.destination, result); // for cities' name display
+      setError(false);
+    }
   };
+
+  console.log(result);
 
   return (
     <div>
@@ -97,11 +117,12 @@ const NewFlight = ({ onAdd, onChange, passengers, setPassengers }) => {
           setInputs={setInputs}
           bothWays={bothWays}
           onChange={onChange}
+          setCodeFrom={setCodeFrom}
+          setCodeTo={setCodeTo}
         />
-        <div className="search_box">
-          <ButtonStyled />
-        </div>
+        <BtnSubmit ButtonStyled={ButtonStyled} />
       </div>
+      {error && <CustomizedSnackbar type="error" text="Fill in all inputs!" />}
     </div>
   );
 };
