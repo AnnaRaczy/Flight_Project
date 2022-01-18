@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import useVisibleComponent from "../hooks/Visible";
 import { schemaSignup } from "./validation";
 import { useForm } from "react-hook-form";
-
+import { usersCollectionRef } from "./MyFlights";
 import {
   Button,
   Dialog,
@@ -13,28 +13,38 @@ import {
   Typography,
 } from "@material-ui/core";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { addDoc } from "firebase/firestore";
 
-const ErrorMessage = (nameValue) => {
-  return <p>{`errors.${nameValue}?.message`}</p>;
+// const ErrorMessage = (nameValue) => {
+//   return <p>{`errors.${nameValue}?.message`}</p>;
+// };
+
+const UserExists = () => {
+  return (
+    <p className="user_error">
+      <i className="fas fa-exclamation-circle excl_mark"></i>User already exists
+    </p>
+  );
 };
 
-export function TextInput({ register, fn, label, name, type }) {
-  return (
-    <TextField
-      className="selections_all--inputs login_input"
-      variant="outlined"
-      ref={register}
-      onChange={fn}
-      label={label}
-      name={name}
-      type={type}
-    />
-  );
-}
+// export function TextInput({ register, fn, label, name, type }) {
+//   return (
+//     <TextField
+//       className="selections_all--inputs login_input"
+//       variant="outlined"
+//       ref={register}
+//       onChange={fn}
+//       label={label}
+//       name={name}
+//       type={type}
+//     />
+//   );
+// }
 
 const SignupBtn = ({ fn }) => {
+  const { handleSubmit } = useForm({ resolver: yupResolver(schemaSignup) });
   return (
-    <Button className="login_btn" onSubmit={fn}>
+    <Button className="login_btn" onClick={handleSubmit(fn)}>
       <Typography variant="button">Create Account</Typography>
     </Button>
   );
@@ -48,37 +58,51 @@ export function SignupForm({
   BackBtn,
 }) {
   const { signUserUp } = useAuth();
+  const [error, setError] = useState(false);
   const [state, setState] = useState({
-    name: "",
+    firstName: "",
     email: "",
     password: "",
     passwordConfirm: "",
   });
 
-  // to connect it with yup, pass a yup resolver containing created schema
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(schemaSignup),
   });
-  //register = fn(determines which fields are used for validation)
-  // handle = fn(as onSubmit of the form)
-  //errors = obj(constains all errors dispalyed by yup and stored here)
 
-  const handleForm = (e) => {
-    const { name, value } = e.target;
-    setState({
-      ...state,
-      [name]: value,
-    });
-  };
+  // const handleForm = (e) => {
+  //   setError(false);
+  //   const { name, value } = e.target;
+  //   setState({
+  //     ...state,
+  //     [name]: value,
+  //   });
+  // };
 
   const submitForm = (data) => {
-    console.log(data.name);
-    // if (state.password !== state.passwordConfirm) {
-    //   console.log("Passwords do not match");
-    // }
-    signUserUp(data.name, data.email, data.password).catch((err) =>
-      console.log(JSON.stringify(err))
-    ); // Handle errors here.
+    // setError(false);
+    signUserUp(data.firstName, data.email, data.password).catch((err) => {
+      setError(true);
+    });
+    // const createUser = async () => {
+    //   await addDoc(usersCollectionRef, [
+    //     {
+    //       name: state.firstName,
+    //       email: state.email,
+    //       adults: "",
+    //       children: "",
+    //       dateFrom: "",
+    //       dateTo: "",
+    //       flightFrom: "",
+    //       flightTo: "",
+    //       hourFrom: "",
+    //       hourBack: "",
+    //       price: "",
+    //     },
+    //   ]);
+    // };
+    // createUser();
+    console.log("Data:", data);
   };
 
   const handleBack = () => {
@@ -95,44 +119,54 @@ export function SignupForm({
       >
         <DialogTitle className="Header">Sign up</DialogTitle>
         <DialogContent>
-          <TextInput
+          {error && <UserExists />}
+          <TextField
+            className="selections_all--inputs login_input"
+            variant="outlined"
             label="Name..."
-            name="name"
+            name="firstName"
             type="text"
-            // fn={handleForm}
-            register={register} //to be part of validation
+            // onChange={handleForm}
+            ref={register} //to be part of validation
           />
           {/* <ErrorMessage nameValue="name" /> */}
-          <p>{errors.name?.message}</p>
-          <TextInput
+          <p>{errors?.name?.message}</p>
+          <TextField
+            className="selections_all--inputs login_input"
+            variant="outlined"
             label="Email..."
             name="email"
             type="text"
-            // fn={handleForm}
-            register={register}
+            // onChange={handleForm}
+            ref={register}
           />
           {/* <ErrorMessage nameValue="email" /> */}
-          <p>{errors.email?.message}</p>
-          <TextInput
+          <p>{errors?.email?.message}</p>
+          <TextField
+            className="selections_all--inputs login_input"
+            variant="outlined"
             label="Password..."
             name="password"
             type="password"
-            // fn={handleForm}
-            register={register}
+            // onChange={handleForm}
+            ref={register}
           />
           {/* <ErrorMessage nameValue="password" /> */}
-          <p>{errors.password?.message}</p>
-          <TextInput
+          <p>{errors?.password?.message}</p>
+          <TextField
+            className="selections_all--inputs login_input"
+            variant="outlined"
             label="Password Confirmation..."
             name="passwordConfirm"
             type="password"
-            // fn={handleForm}
-            register={register}
+            // onChange={handleForm}
+            ref={register}
           />
           {/* <ErrorMessage nameValue="passwordConfirm" /> */}
-          <p>{errors.passwordConfirm && "Password don't match"}</p>
+          <p>{errors?.passwordConfirm && "Passwords don't match"}</p>
           <div className="login_btn--wrapper">
-            <SignupBtn fn={handleSubmit(submitForm)} />
+            {/* <SignupBtn fn={handleSubmit} submitForm={submitForm} /> */}
+            <SignupBtn fn={submitForm} />
             <BackBtn fn={handleBack} />
           </div>
         </DialogContent>
@@ -140,3 +174,28 @@ export function SignupForm({
     </div>
   );
 }
+
+// export function SignupButton() {
+//   const { currentUser } = useAuth();
+//   const logged = currentUser !== null;
+//   const { ref, isComponentVisible, setIsComponentVisible } =
+//     useVisibleComponent(false);
+
+//   const handleClick = () => {
+//     setIsComponentVisible(true);
+//   };
+
+//   return (
+//     <div>
+//       <Button
+//         id="demo-positioned-buttonLog"
+//         className="MuiButton-text-login"
+//         onClick={handleClick}
+//         autoFocus={false}
+//       >
+//         <span>{logged ? "Log Out" : "Sign Up"}</span>
+//       </Button>
+//       <div ref={ref}>{isComponentVisible && <SignupForm />}</div>
+//     </div>
+//   );
+// }
