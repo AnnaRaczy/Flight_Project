@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import useVisibleComponent from "../hooks/Visible";
 import { schemaSignup } from "./validation";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { usersCollectionRef } from "./MyFlights";
 import {
   Button,
@@ -27,25 +27,97 @@ const UserExists = () => {
   );
 };
 
-// export function TextInput({ register, fn, label, name, type }) {
-//   return (
-//     <TextField
-//       className="selections_all--inputs login_input"
-//       variant="outlined"
-//       ref={register}
-//       onChange={fn}
-//       label={label}
-//       name={name}
-//       type={type}
-//     />
-//   );
-// }
-
-const SignupBtn = ({ fn }) => {
-  const { handleSubmit } = useForm({ resolver: yupResolver(schemaSignup) });
+const ControllerPsswdConf = ({ control }) => {
   return (
-    <Button className="login_btn" onClick={handleSubmit(fn)}>
-      <Typography variant="button">Create Account</Typography>
+    <Controller
+      render={({ field }) => (
+        <TextField
+          {...field}
+          className="selections_all--inputs login_input"
+          variant="outlined"
+          label="Password Confirmation..."
+          type="password"
+        />
+      )}
+      name="passwordConfirm"
+      control={control}
+    />
+  );
+};
+
+const ControllerPsswd = ({ control }) => {
+  return (
+    <Controller
+      render={({ field }) => (
+        <TextField
+          {...field}
+          className="selections_all--inputs login_input"
+          variant="outlined"
+          label="Password..."
+          type="password"
+        />
+      )}
+      name="password"
+      control={control}
+    />
+  );
+};
+
+const ControllerEmail = ({ control }) => {
+  return (
+    <Controller
+      render={({ field }) => (
+        <TextField
+          {...field}
+          className="selections_all--inputs login_input"
+          variant="outlined"
+          label="Email..."
+          type="text"
+        />
+      )}
+      name="email"
+      control={control}
+    />
+  );
+};
+
+const ControllerName = ({ control }) => {
+  return (
+    <Controller
+      render={({ field }) => (
+        <TextField
+          {...field}
+          className="selections_all--inputs login_input"
+          variant="outlined"
+          label="Name..."
+          type="text"
+        />
+      )}
+      name="firstName"
+      control={control}
+    />
+  );
+};
+
+const Controllers = ({ errors, control }) => {
+  return (
+    <>
+      <ControllerName control={control} />
+      <p>{errors?.firstName?.message}</p>
+      <ControllerEmail control={control} />
+      <p>{errors?.email?.message}</p>
+      <ControllerPsswd control={control} />
+      <p>{errors?.password?.message}</p>
+      <ControllerPsswdConf control={control} />
+      <p>{errors?.passwordConfirm && "Passwords don't match"}</p>
+    </>
+  );
+};
+
+const SignupBtn = () => {
+  return (
+    <Button className="login_btn" type="submit" form="signup">
+      Create Account
     </Button>
   );
 };
@@ -59,50 +131,44 @@ export function SignupForm({
 }) {
   const { signUserUp } = useAuth();
   const [error, setError] = useState(false);
-  const [state, setState] = useState({
+
+  const defaultValues = {
     firstName: "",
     email: "",
     password: "",
     passwordConfirm: "",
-  });
+  };
 
-  const { register, handleSubmit, errors } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues,
     resolver: yupResolver(schemaSignup),
   });
 
-  // const handleForm = (e) => {
-  //   setError(false);
-  //   const { name, value } = e.target;
-  //   setState({
-  //     ...state,
-  //     [name]: value,
-  //   });
-  // };
-
-  const submitForm = (data) => {
-    // setError(false);
+  const onSubmit = (data) => {
+    console.log("onSubmit", data);
+    setError(false);
     signUserUp(data.firstName, data.email, data.password).catch((err) => {
       setError(true);
     });
-    // const createUser = async () => {
-    //   await addDoc(usersCollectionRef, [
-    //     {
-    //       name: state.firstName,
-    //       email: state.email,
-    //       adults: "",
-    //       children: "",
-    //       dateFrom: "",
-    //       dateTo: "",
-    //       flightFrom: "",
-    //       flightTo: "",
-    //       hourFrom: "",
-    //       hourBack: "",
-    //       price: "",
-    //     },
-    //   ]);
-    // };
-    // createUser();
-    console.log("Data:", data);
+    const createUser = async () => {
+      await addDoc(usersCollectionRef, {
+        email: data.email,
+        adults: "",
+        children: "",
+        dateFrom: "",
+        dateTo: "",
+        flightFrom: "",
+        flightTo: "",
+        hourFrom: "",
+        hourBack: "",
+        price: "",
+      });
+    };
+    createUser();
   };
 
   const handleBack = () => {
@@ -120,55 +186,13 @@ export function SignupForm({
         <DialogTitle className="Header">Sign up</DialogTitle>
         <DialogContent>
           {error && <UserExists />}
-          <TextField
-            className="selections_all--inputs login_input"
-            variant="outlined"
-            label="Name..."
-            name="firstName"
-            type="text"
-            // onChange={handleForm}
-            ref={register} //to be part of validation
-          />
-          {/* <ErrorMessage nameValue="name" /> */}
-          <p>{errors?.name?.message}</p>
-          <TextField
-            className="selections_all--inputs login_input"
-            variant="outlined"
-            label="Email..."
-            name="email"
-            type="text"
-            // onChange={handleForm}
-            ref={register}
-          />
-          {/* <ErrorMessage nameValue="email" /> */}
-          <p>{errors?.email?.message}</p>
-          <TextField
-            className="selections_all--inputs login_input"
-            variant="outlined"
-            label="Password..."
-            name="password"
-            type="password"
-            // onChange={handleForm}
-            ref={register}
-          />
-          {/* <ErrorMessage nameValue="password" /> */}
-          <p>{errors?.password?.message}</p>
-          <TextField
-            className="selections_all--inputs login_input"
-            variant="outlined"
-            label="Password Confirmation..."
-            name="passwordConfirm"
-            type="password"
-            // onChange={handleForm}
-            ref={register}
-          />
-          {/* <ErrorMessage nameValue="passwordConfirm" /> */}
-          <p>{errors?.passwordConfirm && "Passwords don't match"}</p>
-          <div className="login_btn--wrapper">
-            {/* <SignupBtn fn={handleSubmit} submitForm={submitForm} /> */}
-            <SignupBtn fn={submitForm} />
-            <BackBtn fn={handleBack} />
-          </div>
+          <form id="signup" onSubmit={handleSubmit(onSubmit)}>
+            <Controllers errors={errors} control={control} />
+            <div className="login_btn--wrapper">
+              <SignupBtn />
+              <BackBtn fn={handleBack} />
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
     </div>

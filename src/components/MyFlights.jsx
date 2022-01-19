@@ -1,98 +1,90 @@
 import React, { useState, useEffect } from "react";
 import { getHourBack } from "../js/functions";
 import { db } from "../js/firebase-config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const usersCollectionRef = collection(db, "users");
 
 export { usersCollectionRef };
-const Price = (currentUser) => {
+const Price = (user) => {
+  const newUser = user.user.user.user;
   return (
     <div className="my_flights--price">
       Total:{" "}
-      {/* {users.price * users.adults +
-        (users.price / 2) * users.children}{" "} */}
-      25 €
+      {newUser.price * newUser.adults + (newUser.price / 2) * newUser.children}{" "}
+      €
     </div>
   );
 };
-const Children = (currentUser) => {
+const Children = (user) => {
+  const newUser = user.user.user.user;
   return (
     <div className="my_flights--children">
       <i className="fas fa-baby baby_icon"></i>
       <span className="flights_price--passengers">
-        {/* {users.children} */}
-        Children: 0
+        Children: {newUser.children}
       </span>
     </div>
   );
 };
 
-const Adults = (currentUser) => {
+const Adults = (user) => {
+  const newUser = user.user.user.user;
   return (
     <div>
       <i className="fas fa-user-friends"></i>
       <span className="flights_price--passengers">
-        {/* {users.adults} */}
-        Adults: 2
+        Adults: {newUser.adults}
       </span>
     </div>
   );
 };
-const Travelers = (currentUser) => {
+const Travelers = (user) => {
   return (
     <div>
-      <Adults currentUser={currentUser} />
-      <Children currentUser={currentUser} />
+      <Adults user={user} />
+      <Children user={user} />
     </div>
   );
 };
-const FlightsTo = (users) => {
+const FlightsTo = (user) => {
+  const newUser = user.user.user.user;
+  const from = newUser.hourBack.substr(11, 5);
+  const to = getHourBack(newUser.return_at);
   return (
     <div className="flights_data--to">
-      <span className="flight_day">
-        {/* {currentUser.return_at.substr(0, 10)} */}
-        Data To
-      </span>
+      <span className="flight_day">{newUser.hourBack}</span>
       <span className="flight_hours">
-        {/* {currentUser.return_at.substr(11, 5)} -{" "}
-        {getHourBack(currentUser.return_at)} */}{" "}
-        16:35 - 18:35
+        {from} - '{to}'
       </span>
       <div className="my_flights--cities">
-        {/* {currentUser.inputTo} - {currentUser.inputFrom} */} Barcelona -
-        Geneva
+        {newUser.flightTo} - {newUser.flightFrom}
       </div>
     </div>
   );
 };
 
-const FlightsFrom = (users) => {
+const FlightsFrom = (user) => {
+  const newUser = user.user.user.user;
+  const hourFrom = newUser.hourBack.substr(11, 5);
+  const hourTo = getHourBack(newUser.hourBack);
   return (
     <div className="flights_data--from">
-      <span className="flight_day">
-        {/* {currentUser} */}
-        Data From
-      </span>
-      <span className="flight_hours">
-        {/* {currentUser.departure_at.substr(11, 5)} -{" "}
-        {getHourBack(currentUser.departure_at)} */}{" "}
-        06:05 - 10:05
-      </span>
+      <span className="flight_day">{newUser.dateFrom}</span>
+      <span className="flight_hours">{{ hourFrom } - { hourTo }}</span>
       <div className="my_flights--cities">
-        {/* {currentUser.inputFrom} - {currentUser.inputTo} */} Geneva -
-        Barcelona
+        {newUser.flightFrom} - {newUser.flightTo}
       </div>
     </div>
   );
 };
 
-const Data = (currentUser) => {
+const Data = (user) => {
   return (
     <div>
-      <FlightsFrom currentUser={currentUser} />
-      <FlightsTo currentUser={currentUser} />
+      <FlightsFrom user={user} />
+      <FlightsTo user={user} />
     </div>
   );
 };
@@ -101,14 +93,14 @@ const Title = () => {
   return <h1 className="title">My Flights</h1>;
 };
 
-const SavedFlights = (currentUser) => {
+const SavedFlights = (user) => {
   return (
     <>
       <Title />
       <div className="container wrapper my_flights--box">
-        <Data currentUser={currentUser} />
-        <Travelers currentUser={currentUser} />
-        <Price currentUser={currentUser} />
+        <Data user={user} />
+        <Travelers user={user} />
+        <Price user={user} />
       </div>
     </>
   );
@@ -116,29 +108,26 @@ const SavedFlights = (currentUser) => {
 
 const MyFlights = () => {
   const authUser = getAuth();
-  const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState();
-
-  console.log("authUser:", authUser.currentUser.email);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
-    const getUsers = async () => {
-      const data = await getDocs(usersCollectionRef);
-      // console.log("Data collection:", data);
-      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))); // returns object containing all fields in doc, ... so we can add additional field - id
+    const getUser = async () => {
+      const q = query(
+        usersCollectionRef,
+        where("email", "==", authUser.currentUser.email)
+      );
+      const data = await getDocs(q);
+      data.forEach((doc) => {
+        setUser({ ...doc.data(), id: doc.id });
+      });
     };
 
-    getUsers();
-    const newUser = users.filter(
-      (user) => user.email === authUser.currentUser.email
-    );
-    setCurrentUser(newUser);
+    getUser();
   }, []);
 
-  console.log("currentUser:", currentUser);
-  console.log("users:", users);
+  console.log("user:", user);
 
-  return <SavedFlights currentUser={currentUser} />;
+  return <SavedFlights user={user} />;
 };
 
 export { MyFlights };

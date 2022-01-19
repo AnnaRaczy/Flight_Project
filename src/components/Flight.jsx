@@ -5,6 +5,11 @@ import { FlightsPrice } from "./FlightPrice";
 import airlines from "../airlines.json";
 // import { addHours, format } from "date-fns";
 import { getHourBack } from "../js/functions";
+import { db } from "../js/firebase-config";
+import { doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { usersCollectionRef } from "./MyFlights";
+import { getAuth } from "firebase/auth";
 
 const FlightsInfo = ({ data, getAirline }) => {
   return (
@@ -17,25 +22,54 @@ const FlightsInfo = ({ data, getAirline }) => {
     </div>
   );
 };
-const Flight = (data, onClick) => {
+const Flight = (data) => {
+  const authUser = getAuth();
   const [checked, setChecked] = useState(false);
   const [myFlights, setMyFlights] = useState([]);
+  const [user, setUser] = useState([]);
 
-  function CheckboxStyled() {
+  const getUser = async () => {
+    const q = query(
+      usersCollectionRef,
+      where("email", "==", authUser.currentUser.email)
+    );
+    const data = await getDocs(q);
+    data.forEach((doc) => {
+      setUser({ ...doc.data(), id: doc.id });
+    });
+  };
+
+  const values = {
+    adults: data.adults,
+    children: data.children,
+    flightFrom: data.inputFrom,
+    flightTo: data.inputTo,
+    dateFrom: data[0],
+    dateTo: data[1].return_at,
+    hourFrom: data[1].departure_at,
+    hourBack: data[1].return_at,
+    price: data[1].price,
+  };
+
+  const updateUser = async () => {
+    getUser();
+    const userRef = doc(db, "users", user.id);
+    console.log(userRef);
+    await updateDoc(userRef, values);
+  };
+  const CheckboxStyled = () => {
     const handleCheck = (e) => {
       setChecked(e.target.checked);
       setMyFlights(data);
-      onClick(data);
+      data.onClick(data);
+      updateUser();
     };
     return (
       <div>
         <Checkbox checked={checked} onChange={handleCheck} />
       </div>
     );
-  }
-  console.log("Data:", data);
-  console.log("FlightsList:", myFlights);
-  // console.log("From, to:", data.inputFrom, data.inputTo);
+  };
 
   const getAirline = (data, input) => {
     const airline = data
@@ -45,27 +79,19 @@ const Flight = (data, onClick) => {
     return airline;
   };
 
-  // const getHourBack = (elem) => {
-  //   const hourBack = Date.parse(`${elem}`);
-  //   const newHour = addHours(hourBack, 4);
-  //   return format(newHour.getTime(), "HH:mm");
-  // };
-
   return (
-    <>
-      <div className="container wrapper">
-        <span className="flights_checkboxes">
-          <CheckboxStyled />
-        </span>
-        <FlightsWrapper
-          data={data}
-          CheckboxStyled={CheckboxStyled}
-          getHourBack={getHourBack}
-        />
-        <FlightsInfo data={data} getAirline={getAirline} />
-        <FlightsPrice data={data} />
-      </div>
-    </>
+    <div id={data.id} className="container wrapper">
+      <span className="flights_checkboxes">
+        <CheckboxStyled />
+      </span>
+      <FlightsWrapper
+        data={data}
+        CheckboxStyled={CheckboxStyled}
+        getHourBack={getHourBack}
+      />
+      <FlightsInfo data={data} getAirline={getAirline} />
+      <FlightsPrice data={data} />
+    </div>
   );
 };
 
