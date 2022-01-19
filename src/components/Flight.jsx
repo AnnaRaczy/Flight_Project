@@ -1,5 +1,5 @@
-import { Checkbox } from "@material-ui/core";
 import React, { useState } from "react";
+import { Checkbox } from "@material-ui/core";
 import { FlightsWrapper } from "./FlightOutput";
 import { FlightsPrice } from "./FlightPrice";
 import airlines from "../airlines.json";
@@ -44,11 +44,13 @@ const Flight = (data) => {
     flightFrom: data.inputFrom,
     flightTo: data.inputTo,
     dateFrom: data[0],
-    dateTo: data[1].return_at,
-    hourFrom: data[1].departure_at,
-    hourBack: data[1].return_at,
+    dateTo: data[1].return_at.substr(0, 10),
+    hourFrom: data[1].departure_at.substr(11, 5),
+    hourBack: data[1].return_at.substr(11, 5),
     price: data[1].price,
   };
+
+  console.log("Values:", values);
 
   const updateUser = async () => {
     getUser();
