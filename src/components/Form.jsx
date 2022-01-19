@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import iata from "../iata.json";
-import { InputsError } from "./Error";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 export function Inputs({ handleForm, type, label, name }) {
   return (
@@ -27,8 +23,6 @@ const Form = ({
   setCodeFrom,
   setCodeTo,
 }) => {
-  const [error, setError] = useState(false);
-
   const getCode = (data, input, fn) => {
     const code = data
       .filter((item) => item.city === input)
@@ -48,8 +42,6 @@ const Form = ({
       getCode(iata, inputs.destination, setCodeTo);
     }
   };
-
-  console.log("State from Form:", inputs);
 
   return (
     <form

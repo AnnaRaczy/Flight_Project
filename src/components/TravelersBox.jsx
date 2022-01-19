@@ -45,7 +45,6 @@ const ButtonMenu = ({ open, handleClick, adults, children }) => {
       autoFocus={false}
     >
       <i className="fas fa-user-friends users_icon"></i>{" "}
-      {/* <i className="fas fa-chevron-down arrow_icon"></i> */}
       <span className="users_icon--number">{adults + children}</span>
     </Button>
   );

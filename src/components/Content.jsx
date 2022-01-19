@@ -3,10 +3,6 @@ import NewFlight from "./NewFlight";
 import Flight from "./Flight";
 import { MyFlights } from "./MyFlights";
 import "../scss/main.scss";
-// import { auth, db } from "../js/firebase-config";
-import { Button } from "@material-ui/core";
-import Menu from "@mui/material/Menu";
-import { getAuth } from "firebase/auth";
 
 const NoFlights = () => {
   return (
@@ -23,12 +19,12 @@ const EmptyData = ({ data }) => {
 
 const FlightsList = ({ flights, from, to, adults, children, onClick }) => {
   return (
-    <ul>
+    <div>
       {flights !== null &&
         flights.map((item, id) => {
-          console.log("items:", { ...item });
           return (
             <Flight
+              id={id}
               key={id}
               {...item}
               inputFrom={from}
@@ -39,12 +35,11 @@ const FlightsList = ({ flights, from, to, adults, children, onClick }) => {
             />
           );
         })}
-    </ul>
+    </div>
   );
 };
 
 const Content = ({ main }) => {
-  const authUser = getAuth();
   const [flights, setFlights] = useState([]);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -53,22 +48,10 @@ const Content = ({ main }) => {
     adults: 1,
     children: 0,
   });
-  const [anchorEl, setAnchorEl] = useState(null);
   const [savedFlights, setSavedFlights] = useState([]);
-
-  const open = Boolean(anchorEl);
-  const handleClick = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleAdd = (data) => {
     setFlights(Object.entries(data));
-    console.log("data:", Object.entries(data));
-    // console.log("is data.length === 0?:", Object.entries(data).length === 0);
-    // Object.entries(data).length === 0 ? setResult(false) : setResult(true);
   };
 
   const handleInputs = (origin, destination, result) => {
@@ -76,10 +59,6 @@ const Content = ({ main }) => {
     setTo(destination);
     setData(result);
   };
-
-  console.log("Content From:", from);
-  console.log("Content To:", to);
-  console.log("Flights:", flights);
 
   const handleMyFlights = (myFlights) => {
     setSavedFlights(myFlights);
@@ -92,7 +71,7 @@ const Content = ({ main }) => {
         </>
       )}
       {main && (
-        <>
+        <div className="flights_output">
           <NewFlight
             onAdd={handleAdd}
             onChange={handleInputs}
@@ -110,15 +89,10 @@ const Content = ({ main }) => {
             onClick={handleMyFlights}
           />
           <EmptyData data={data} />
-        </>
+        </div>
       )}
     </div>
   );
 };
 
 export default Content;
-
-// background: linear-gradient(
-//   rgba(255, 255, 255, 0.925),
-//   rgba(199, 193, 193, 0.233)
-// );

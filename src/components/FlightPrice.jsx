@@ -1,7 +1,12 @@
 import React from "react";
 
-const PriceButton = () => {
-  return <button className="flights_price--btn">SAVE</button>;
+const PriceButton = ({ onClick }) => {
+  const handleClick = () => {};
+  return (
+    <button className="flights_price--btn" onClick={handleClick}>
+      SAVE
+    </button>
+  );
 };
 const PriceTotal = ({ data }) => {
   return (
@@ -31,7 +36,6 @@ const FlightsPrice = ({ data }) => {
   return (
     <div className="flights_price">
       <PriceTravelers data={data} />
-      {/* <div className="flights_price--name">Price:</div> */}
       <PriceTotal data={data} />
       <PriceButton />
     </div>

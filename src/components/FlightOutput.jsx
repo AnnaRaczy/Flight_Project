@@ -62,12 +62,9 @@ const FlightsData = ({ data, getHourBack }) => {
   );
 };
 
-const FlightsWrapper = ({ data, CheckboxStyled, getHourBack }) => {
+const FlightsWrapper = ({ data, getHourBack }) => {
   return (
     <div className="flights_wrapper">
-      {/* <span className="flights_checkboxes">
-        <CheckboxStyled />
-      </span> */}
       <FlightsData data={data} getHourBack={getHourBack} />
       <FlightsNumbers data={data} />
     </div>

@@ -95,12 +95,10 @@ const NewFlight = ({
         onAdd,
         setResult
       );
-      onChange(inputs.origin, inputs.destination, result); // for cities' name display
+      onChange(inputs.origin, inputs.destination, result);
       setError(false);
     }
   };
-
-  console.log(result);
 
   return (
     <div>

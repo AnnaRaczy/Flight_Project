@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import useVisibleComponent from "../hooks/Visible";
 import {
   Button,
   Dialog,
@@ -10,6 +9,13 @@ import {
   Typography,
 } from "@material-ui/core";
 
+const UserError = () => {
+  return (
+    <p className="user_error">
+      <i class="fas fa-exclamation-circle excl_mark"></i>User not found
+    </p>
+  );
+};
 export function TextInput({ fn, name, label, type }) {
   return (
     <TextField
@@ -41,24 +47,25 @@ export function BackBtn({ fn }) {
 
 export function LoginForm({ visible, setOpen, onClose, setOpenLoginForm }) {
   const { logUserIn } = useAuth();
-
+  const [error, setError] = useState(false);
   const [state, setState] = useState({
     email: "",
     password: "",
   });
 
   const handleForm = (e) => {
+    setError(false);
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
   };
-  // console.log("State Login:", state);
 
   const handleSubmit = () => {
-    logUserIn(state.email, state.password).catch((err) =>
-      console.log(JSON.stringify(err))
-    ); // Handle errors here.
+    logUserIn(state.email, state.password).catch((err) => {
+      console.log(JSON.stringify(err));
+      setError(true);
+    });
   };
   const handleBack = () => {
     setOpen(true);
@@ -74,16 +81,17 @@ export function LoginForm({ visible, setOpen, onClose, setOpenLoginForm }) {
       >
         <DialogTitle className="Header">Continue to your account</DialogTitle>
         <DialogContent>
+          {error && <UserError />}
           <TextInput
             fn={handleForm}
             label="Email..."
-            name="email" // added to state
+            name="email"
             type="text"
           />
           <TextInput
             fn={handleForm}
             label="Password..."
-            name="password" // added to state
+            name="password"
             type="password"
           />
           <div className="login_btn--wrapper">

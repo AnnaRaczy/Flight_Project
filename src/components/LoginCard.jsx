@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Button, Dialog, DialogTitle, DialogContent } from "@mui/material";
-// import GoogleIcon from "@mui/icons-material/Google";
 import { LoginForm } from "./Login";
 import { SignupForm } from "./Signup";
 

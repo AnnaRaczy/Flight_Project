@@ -3,11 +3,10 @@ import React, { useState } from "react";
 import { FlightsWrapper } from "./FlightOutput";
 import { FlightsPrice } from "./FlightPrice";
 import airlines from "../airlines.json";
-// import { addHours, format } from "date-fns";
 import { getHourBack } from "../js/functions";
 import { db } from "../js/firebase-config";
 import { doc, updateDoc } from "firebase/firestore";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { getDocs, query, where } from "firebase/firestore";
 import { usersCollectionRef } from "./MyFlights";
 import { getAuth } from "firebase/auth";
 
@@ -80,7 +79,7 @@ const Flight = (data) => {
   };
 
   return (
-    <div id={data.id} className="container wrapper">
+    <div id={data.id} className="container wrapper flights_output">
       <span className="flights_checkboxes">
         <CheckboxStyled />
       </span>

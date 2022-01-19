@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import useVisibleComponent from "../hooks/Visible";
 import { schemaSignup } from "./validation";
 import { useForm, Controller } from "react-hook-form";
 import { usersCollectionRef } from "./MyFlights";
@@ -10,14 +9,9 @@ import {
   DialogTitle,
   DialogContent,
   TextField,
-  Typography,
 } from "@material-ui/core";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { addDoc } from "firebase/firestore";
-
-// const ErrorMessage = (nameValue) => {
-//   return <p>{`errors.${nameValue}?.message`}</p>;
-// };
 
 const UserExists = () => {
   return (
@@ -198,28 +192,3 @@ export function SignupForm({
     </div>
   );
 }
-
-// export function SignupButton() {
-//   const { currentUser } = useAuth();
-//   const logged = currentUser !== null;
-//   const { ref, isComponentVisible, setIsComponentVisible } =
-//     useVisibleComponent(false);
-
-//   const handleClick = () => {
-//     setIsComponentVisible(true);
-//   };
-
-//   return (
-//     <div>
-//       <Button
-//         id="demo-positioned-buttonLog"
-//         className="MuiButton-text-login"
-//         onClick={handleClick}
-//         autoFocus={false}
-//       >
-//         <span>{logged ? "Log Out" : "Sign Up"}</span>
-//       </Button>
-//       <div ref={ref}>{isComponentVisible && <SignupForm />}</div>
-//     </div>
-//   );
-// }

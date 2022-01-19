@@ -125,8 +125,6 @@ const MyFlights = () => {
     getUser();
   }, []);
 
-  console.log("user:", user);
-
   return <SavedFlights user={user} />;
 };
 
