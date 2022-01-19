@@ -1,5 +1,4 @@
 import { API_token, API_KEY, API_HOST, API_local } from "./constants";
-import React, { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,16 +6,14 @@ import {
 } from "firebase/auth";
 import { auth, provider } from "./firebase-config";
 import {
-  getAuth,
   updateProfile,
   signInWithPopup,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
+import { addHours, format } from "date-fns";
 
 const getFlights = (codeTo, codeFrom, departure, back, successCallback, fn) => {
   fetch(
-    // "https://travelpayouts-travelpayouts-flight-data-v1.p.rapidapi.com/v1/prices/calendar?calendar_type=departure_date&destination=BCN&origin=GVA&depart_date=2021-06-23&currency=EUR&return_date=2021-12-31",
     `https://travelpayouts-travelpayouts-flight-data-v1.p.rapidapi.com/v1/prices/calendar?calendar_type=departure_date&destination=${codeTo}&origin=${codeFrom}&depart_date=${departure}&currency=EUR&return_date=${back}`,
     {
       method: "GET",
@@ -31,7 +28,7 @@ const getFlights = (codeTo, codeFrom, departure, back, successCallback, fn) => {
     .then((data) => {
       if (data.success === true && typeof successCallback === "function") {
         successCallback(data.data);
-        console.log(Object.values(data.data).length);
+        console.log(Object.values(data.data));
         Object.values(data.data).length === 0 ? fn(false) : fn(true);
       }
     })
@@ -39,12 +36,16 @@ const getFlights = (codeTo, codeFrom, departure, back, successCallback, fn) => {
     .catch((err) => console.log(err));
 };
 
+const getHourBack = (elem) => {
+  const hourBack = Date.parse(`${elem}`);
+  const newHour = addHours(hourBack, 4);
+  return format(newHour.getTime(), "HH:mm");
+};
+
 const register = async (nick, email, psswd) => {
   try {
     const user = await createUserWithEmailAndPassword(auth, email, psswd);
-    console.log("User Functions:", user);
     const newUser = user.user;
-    console.log("Functions firebaseUser:", newUser);
     const update = updateProfile(newUser, { displayName: nick });
     update.then((data) => console.log("Name had been updated:", data));
     return update;
@@ -52,34 +53,11 @@ const register = async (nick, email, psswd) => {
     console.log(err.message);
     return err.message;
   }
-
-  // createUserWithEmailAndPassword(auth, email, psswd) // Tutaj powinna byc funkcja dodajaca nick do Firebase, zeby potem mozna bylo wyswietlic imie w headerze nawet po odswiezeniu strony, a funkcja pobierajaca dane z Firestore w komponencie App w UseEffect
-  //   .then((userCredential) => {
-  //     // Signed in
-  //     const user = userCredential.user;
-  //     console.log("userCredential:", userCredential);
-  //   })
-
-  //   .catch((error) => {
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //     console.log(error.message);
-  //   });
 };
 
 const login = async (email, psswd) => {
-  // try {
-  //   const user = await signInWithEmailAndPassword(auth, email, psswd);
-  //   localStorage.setItem("user", JSON.stringify(user));
-  //   console.log("Login user:", user);
-  // } catch (err) {
-  //   console.log(err.message);
-  //   return err.message;
-  // }
-
   signInWithEmailAndPassword(auth, email, psswd)
     .then((userCredential) => {
-      // Signed in
       const user = userCredential.user;
     })
     .catch((error) => {
@@ -92,7 +70,6 @@ const login = async (email, psswd) => {
 const loginGoogle = () => {
   signInWithPopup(auth, provider)
     .then((result) => {
-      // Google Access Token - to access the Google API.
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
       const user = result.user;
@@ -111,14 +88,6 @@ const logout = async () => {
   const out = await signOut(auth);
   console.log("Logout user:", auth.currentUser);
   return out;
-  // signOut(auth)
-  //   .then(() => {
-  //     console.log("Logout successful");
-  //   })
-  //   .catch((error) => {
-  //     console.log(error.message);
-  //   });
-  localStorage.clear();
 };
 
-export { getFlights, register, login, loginGoogle, logout };
+export { getFlights, getHourBack, register, login, loginGoogle, logout };
