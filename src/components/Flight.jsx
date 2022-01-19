@@ -38,25 +38,32 @@ const Flight = (data) => {
     });
   };
 
+  const newDateTo = data[1].return_at.substr(0, 10);
+  const newHourFrom = data[1].departure_at.substr(11, 5);
+  const newHourBack = data[1].return_at.substr(11, 5);
+
+  console.log(newHourFrom);
+
   const values = {
     adults: data.adults,
     children: data.children,
     flightFrom: data.inputFrom,
     flightTo: data.inputTo,
     dateFrom: data[0],
-    dateTo: data[1].return_at.substr(0, 10),
-    hourFrom: data[1].departure_at.substr(11, 5),
-    hourBack: data[1].return_at.substr(11, 5),
+    dateTo: newDateTo,
+    hourFrom: newHourFrom,
+    hourBack: newHourBack,
     price: data[1].price,
   };
 
-  console.log("Values:", values);
+  console.log(values);
 
   const updateUser = async () => {
     getUser();
     const userRef = doc(db, "users", user.id);
     console.log(userRef);
-    await updateDoc(userRef, values);
+    const res = await updateDoc(userRef, values);
+    return res;
   };
   const CheckboxStyled = () => {
     const handleCheck = (e) => {
