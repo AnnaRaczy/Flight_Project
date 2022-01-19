@@ -10,7 +10,6 @@
 }
 
 body {
-  height: 100vh;
   overflow-y: auto;
   padding: 0;
   margin: 0;
@@ -20,7 +19,6 @@ body {
   background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)),
     url("../rice_fields.jpg") no-repeat center center fixed;
   background-repeat: no-repeat;
-  background-size: 100%;
   font-size: 13px;
   font-family: "Montserrat";
   letter-spacing: 0.5px;
@@ -93,10 +91,6 @@ body {
     rgba(209, 201, 201, 0.45)
   );
   margin-bottom: 1rem;
-}
-.flights_output {
-  // height: 100%;
-  // overflow: scroll;
 }
 
 .no_flights {
@@ -192,6 +186,10 @@ body {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }
+
+  span.flights_checkboxes {
+    width: 0;
+  }
   .flights_wrapper {
     background: linear-gradient(
       rgba(255, 255, 255, 0.925),
@@ -236,6 +234,7 @@ body {
     .flights_numbers {
       border-radius: 5px;
       width: 40%;
+      padding-right: 0.5rem;
 
       .fa-plane {
         padding-right: 0.8rem;
@@ -250,9 +249,10 @@ body {
         padding-top: 2rem;
       }
 
-      &--to {
+      &--box {
         position: relative;
-        top: 3rem;
+        top: -1.5rem;
+        padding-left: 1.6rem;
       }
     }
   }
@@ -268,8 +268,10 @@ body {
 
     .flights_airline {
       position: relative;
-      top: -1.8rem;
+      top: -0.6rem;
       padding-left: 0.5rem;
+      line-height: 1.2rem;
+      word-break: normal;
     }
   }
 
@@ -558,4 +560,15 @@ body {
 
 .my_flights--children {
   margin-top: -1.1rem;
+}
+
+// MyFlights
+
+.my_flights--date {
+  padding-right: 1rem;
+  font-weight: bold;
+}
+
+.my_flights--price {
+  padding-right: 0.4rem;
 }

@@ -7,12 +7,14 @@ import { getAuth } from "firebase/auth";
 const usersCollectionRef = collection(db, "users");
 
 export { usersCollectionRef };
+
 const Price = (user) => {
-  const newUser = user.user.user.user;
+  const newUser = user.user.user;
   return (
     <div className="my_flights--price">
-      Total:{" "}
-      {newUser.price * newUser.adults + (newUser.price / 2) * newUser.children}{" "}
+      <span className="my_flights--price">Total:</span>
+      {newUser?.price * newUser?.adults +
+        (newUser?.price / 2) * newUser?.children}{" "}
       €
     </div>
   );
@@ -50,13 +52,11 @@ const Travelers = (user) => {
 };
 const FlightsTo = (user) => {
   const newUser = user.user.user.user;
-  const from = newUser.hourBack.substr(11, 5);
-  const to = getHourBack(newUser.return_at);
   return (
     <div className="flights_data--to">
-      <span className="flight_day">{newUser.hourBack}</span>
+      <span className="flight_day my_flights--date">{newUser.dateTo}</span>
       <span className="flight_hours">
-        {from} - '{to}'
+        {newUser.hourBack} - {newUser?.hourBack2}
       </span>
       <div className="my_flights--cities">
         {newUser.flightTo} - {newUser.flightFrom}
@@ -67,14 +67,14 @@ const FlightsTo = (user) => {
 
 const FlightsFrom = (user) => {
   const newUser = user.user.user.user;
-  const hourFrom = newUser.hourBack.substr(11, 5);
-  const hourTo = getHourBack(newUser.hourBack);
   return (
     <div className="flights_data--from">
-      <span className="flight_day">{newUser.dateFrom}</span>
-      <span className="flight_hours">{{ hourFrom } - { hourTo }}</span>
+      <span className="flight_day my_flights--date">{newUser?.dateFrom}</span>
+      <span className="flight_hours">
+        {newUser?.hourFrom} - {newUser?.hourFrom2}
+      </span>
       <div className="my_flights--cities">
-        {newUser.flightFrom} - {newUser.flightTo}
+        {newUser.flightFrom} - {newUser?.flightTo}
       </div>
     </div>
   );
@@ -95,14 +95,11 @@ const Title = () => {
 
 const SavedFlights = (user) => {
   return (
-    <>
-      <Title />
-      <div className="container wrapper my_flights--box">
-        <Data user={user} />
-        <Travelers user={user} />
-        <Price user={user} />
-      </div>
-    </>
+    <div className="container wrapper my_flights--box">
+      <Data user={user} />
+      <Travelers user={user} />
+      <Price user={user} />
+    </div>
   );
 };
 
@@ -123,9 +120,16 @@ const MyFlights = () => {
     };
 
     getUser();
+    setUser(user);
   }, []);
 
-  return <SavedFlights user={user} />;
+  console.log("User:", user);
+  return (
+    <>
+      <Title />
+      {user.length !== 0 && <SavedFlights user={user} />}
+    </>
+  );
 };
 
 export { MyFlights };

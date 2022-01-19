@@ -33,6 +33,7 @@ const Flight = (data) => {
       where("email", "==", authUser.currentUser.email)
     );
     const data = await getDocs(q);
+    console.log(data);
     data.forEach((doc) => {
       setUser({ ...doc.data(), id: doc.id });
     });
@@ -40,9 +41,9 @@ const Flight = (data) => {
 
   const newDateTo = data[1].return_at.substr(0, 10);
   const newHourFrom = data[1].departure_at.substr(11, 5);
+  const newHourFrom2 = getHourBack(data[1].departure_at);
   const newHourBack = data[1].return_at.substr(11, 5);
-
-  console.log(newHourFrom);
+  const newHourBack2 = getHourBack(data[1].return_at);
 
   const values = {
     adults: data.adults,
@@ -52,16 +53,17 @@ const Flight = (data) => {
     dateFrom: data[0],
     dateTo: newDateTo,
     hourFrom: newHourFrom,
+    hourFrom2: newHourFrom2,
     hourBack: newHourBack,
+    hourBack2: newHourBack2,
     price: data[1].price,
   };
-
-  console.log(values);
 
   const updateUser = async () => {
     getUser();
     const userRef = doc(db, "users", user.id);
     console.log(userRef);
+    console.log(values);
     const res = await updateDoc(userRef, values);
     return res;
   };
