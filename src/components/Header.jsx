@@ -15,6 +15,7 @@ function HeaderContent({ setMain, labelName, setLabelName }) {
 
   const handleSignOut = () => {
     signUserOut();
+    setMain(true);
   };
 
   const handleStorage = () => {

@@ -123,11 +123,14 @@ const MyFlights = () => {
     setUser(user);
   }, []);
 
-  console.log("User:", user);
   return (
     <>
       <Title />
-      {user.length !== 0 && <SavedFlights user={user} />}
+      {user.flightFrom !== "" ? (
+        <SavedFlights user={user} />
+      ) : (
+        <h1 className="my_flights--empty">Add flights to display them here.</h1>
+      )}
     </>
   );
 };
