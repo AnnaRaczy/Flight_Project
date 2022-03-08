@@ -14,13 +14,13 @@ const NoFlights = () => {
 };
 
 const EmptyData = ({ data }) => {
-  return data === false && <NoFlights />;
+  return !data && <NoFlights />;
 };
 
 const FlightsList = ({ flights, from, to, adults, children, onClick }) => {
   return (
     <div>
-      {flights !== null &&
+      {!flights &&
         flights.map((item, id) => {
           return (
             <Flight

@@ -3,7 +3,6 @@ import { getFlights } from "../js/functions";
 import Ways from "./Ways";
 import TravelersBox from "./TravelersBox";
 import Form from "./Form";
-import iata from "../iata.json";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import { Alert, CustomizedSnackbar } from "./Snackbars";
@@ -22,6 +21,14 @@ const Selections = ({ handleBoth, handleOne, passengers, setPassengers }) => {
     </div>
   );
 };
+
+// const PriceButton = ({ ButtonStyledSave }) => { // TODO
+//   return (
+//     <button className="search_box">
+//       <ButtonStyledSave />
+//     </button>
+//   );
+// };
 
 const BtnSubmit = ({ ButtonStyled }) => {
   return (
@@ -80,6 +87,15 @@ const NewFlight = ({
     );
   }
 
+  // function ButtonStyledSave() { // TODO
+  //   const classes = styles();
+  //   return (
+  //     <div className="search_box">
+  //       <Button className={classes.root}>Save </Button>
+  //     </div>
+  //   );
+  // }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setData(true);
@@ -118,7 +134,10 @@ const NewFlight = ({
           setCodeFrom={setCodeFrom}
           setCodeTo={setCodeTo}
         />
-        <BtnSubmit ButtonStyled={ButtonStyled} />
+        <div>
+          {/* <PriceButton ButtonStyledSave={ButtonStyledSave} /> */}
+          <BtnSubmit ButtonStyled={ButtonStyled} />
+        </div>
       </div>
       {error && <CustomizedSnackbar type="error" text="Fill in all inputs!" />}
     </div>

@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 const schemaSignup = yup.object().shape({
-  firstName: yup
+  name: yup
     .string()
     .min(2)
     .required("Name should be at least 2 characters long"),

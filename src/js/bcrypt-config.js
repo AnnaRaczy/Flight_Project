@@ -5,7 +5,7 @@ const hashing = async (psswd) => {
     const salt = await bcrypt.genSalt();
     const hashedPsswd = await bcrypt.hash(psswd, salt);
     console.log("Salt:", salt);
-    console.log("HashedPsswd:", hashedPsswd); // hashedPsswd already has Salt info
+    console.log("HashedPsswd:", hashedPsswd);
     return hashedPsswd;
   } catch (err) {
     console.log(err.message);
@@ -20,7 +20,7 @@ const compare = async (loginEmail, registerEmail, password, hashedPsswd) => {
   }
   try {
     if (await bcrypt.compare(password, hashedPsswd)) {
-      console.log("Success"); //// ??
+      console.log("Success");
     }
   } catch (err) {
     console.log(err.message);

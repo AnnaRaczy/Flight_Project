@@ -1,8 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { schemaSignup } from "./validation";
 import { useForm, Controller } from "react-hook-form";
 import { usersCollectionRef } from "./MyFlights";
+import { wrapper } from "../js/functions";
 import {
   Button,
   Dialog,
@@ -87,7 +88,7 @@ const ControllerName = ({ control }) => {
           type="text"
         />
       )}
-      name="firstName"
+      name="name"
       control={control}
     />
   );
@@ -97,13 +98,15 @@ const Controllers = ({ errors, control }) => {
   return (
     <>
       <ControllerName control={control} />
-      <p>{errors?.firstName?.message}</p>
+      <p className="signup_error">{errors?.name?.message}</p>
       <ControllerEmail control={control} />
-      <p>{errors?.email?.message}</p>
+      <p className="signup_error">{errors?.email?.message}</p>
       <ControllerPsswd control={control} />
-      <p>{errors?.password?.message}</p>
+      <p className="signup_error">{errors?.password?.message}</p>
       <ControllerPsswdConf control={control} />
-      <p>{errors?.passwordConfirm && "Passwords don't match"}</p>
+      <p className="signup_error">
+        {errors?.passwordConfirm && "Passwords don't match"}
+      </p>
     </>
   );
 };
@@ -127,7 +130,7 @@ export function SignupForm({
   const [error, setError] = useState(false);
 
   const defaultValues = {
-    firstName: "",
+    name: "",
     email: "",
     password: "",
     passwordConfirm: "",
@@ -143,9 +146,8 @@ export function SignupForm({
   });
 
   const onSubmit = (data) => {
-    console.log("onSubmit", data);
     setError(false);
-    signUserUp(data.firstName, data.email, data.password).catch((err) => {
+    signUserUp(data.name, data.email, data.password).catch(() => {
       setError(true);
     });
     const createUser = async () => {
@@ -173,6 +175,7 @@ export function SignupForm({
   return (
     <div>
       <Dialog
+        ref={wrapper}
         open={visible}
         onClose={onClose}
         className="login_wrapper login_wrapper--form"

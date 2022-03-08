@@ -19,6 +19,7 @@ function HeaderContent({ setMain, labelName, setLabelName }) {
   };
 
   const handleStorage = () => {
+    //react router dom
     if (labelName === "My Flights") {
       setMain(false);
       setLabelName("Main Page");
@@ -28,7 +29,7 @@ function HeaderContent({ setMain, labelName, setLabelName }) {
     }
   };
 
-  if (currentUser === null) {
+  if (!currentUser) {
     return <LoginButton />;
   }
   return (

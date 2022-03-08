@@ -1,10 +1,7 @@
-
-// import firebase from "firebase/app";
+import firebase from "firebase/app";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-
-// TODO create vars in constants file or even better in env variables.
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAEXCYIiI4NYdR3jBy9J-40def4xRON_T8",
@@ -16,8 +13,9 @@ export const firebaseConfig = {
   measurementId: "G-QWLZKB7G5Q",
 };
 
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth();
+const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);
 export const db = getFirestore(app);
-//
+
 export const provider = new GoogleAuthProvider();

@@ -1,1 +1,3 @@
-// Put here Alert component displayed inside Snackbar that will display given contents.
+const InputsError = (from, to, dept) => (from || to || dept ? false : true);
+
+export { InputsError };

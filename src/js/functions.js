@@ -1,4 +1,3 @@
-import { API_token, API_KEY, API_HOST, API_local } from "./constants";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -18,9 +17,9 @@ const getFlights = (codeTo, codeFrom, departure, back, successCallback, fn) => {
     {
       method: "GET",
       headers: {
-        "x-access-token": `${API_token}`,
-        "x-rapidapi-host": `${API_HOST}`,
-        "x-rapidapi-key": `${API_KEY}`,
+        "x-access-token": process.env.REACT_APP_API_token,
+        "x-rapidapi-host": process.env.REACT_APP_API_HOST,
+        "x-rapidapi-key": process.env.REACT_APP_API_KEY,
       },
     }
   )

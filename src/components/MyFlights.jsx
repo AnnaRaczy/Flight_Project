@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { getHourBack } from "../js/functions";
 import { db } from "../js/firebase-config";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
@@ -126,7 +125,7 @@ const MyFlights = () => {
   return (
     <>
       <Title />
-      {user.flightFrom !== "" ? (
+      {user.flightFrom ? (
         <SavedFlights user={user} />
       ) : (
         <h1 className="my_flights--empty">Add flights to display them here.</h1>

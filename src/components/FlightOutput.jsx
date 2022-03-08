@@ -3,7 +3,8 @@ import React from "react";
 const NumbersFrom = ({ data }) => {
   return (
     <div className="flights_numbers--from">
-      <i className="fas fa-plane"></i>Flight Number: {data[1].flight_number}
+      <i className="fas fa-plane"></i>Flight Number:
+      <div className="flights_numbers--box">{data[1].flight_number}</div>
     </div>
   );
 };
@@ -12,7 +13,7 @@ const NumbersTo = ({ data }) => {
   return (
     <div className="flights_numbers--to">
       <i className="fas fa-plane"></i>Flight Number:{" "}
-      {data[1].flight_number + 20}
+      <div className="flights_numbers--box">{data[1].flight_number + 20}</div>
     </div>
   );
 };

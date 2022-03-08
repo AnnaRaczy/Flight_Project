@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { wrapper } from "../js/functions";
 import {
   Button,
   Dialog,
@@ -12,7 +13,7 @@ import {
 const UserError = () => {
   return (
     <p className="user_error">
-      <i class="fas fa-exclamation-circle excl_mark"></i>User not found
+      <i className="fas fa-exclamation-circle excl_mark"></i>User not found
     </p>
   );
 };
@@ -54,10 +55,11 @@ export function LoginForm({ visible, setOpen, onClose, setOpenLoginForm }) {
   });
 
   const handleForm = (e) => {
+    const { name, value } = e.target;
     setError(false);
     setState({
       ...state,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -75,6 +77,7 @@ export function LoginForm({ visible, setOpen, onClose, setOpenLoginForm }) {
   return (
     <div>
       <Dialog
+        ref={wrapper}
         open={visible}
         onClose={onClose}
         className="login_wrapper login_wrapper--form"

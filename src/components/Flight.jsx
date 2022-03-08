@@ -24,7 +24,7 @@ const FlightsInfo = ({ data, getAirline }) => {
 const Flight = (data) => {
   const authUser = getAuth();
   const [checked, setChecked] = useState(false);
-  const [myFlights, setMyFlights] = useState([]);
+  const [, setMyFlights] = useState([]);
   const [user, setUser] = useState([]);
 
   const getUser = async () => {
@@ -62,8 +62,6 @@ const Flight = (data) => {
   const updateUser = async () => {
     getUser();
     const userRef = doc(db, "users", user.id);
-    console.log(userRef);
-    console.log(values);
     const res = await updateDoc(userRef, values);
     return res;
   };

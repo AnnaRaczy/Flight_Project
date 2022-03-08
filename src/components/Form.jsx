@@ -35,10 +35,10 @@ const Form = ({
       ...inputs,
       [e.target.name]: e.target.value,
     });
-    if (inputs.origin !== null) {
+    if (inputs.origin) {
       getCode(iata, inputs.origin, setCodeFrom);
     }
-    if (inputs.destination !== null) {
+    if (!inputs.destination) {
       getCode(iata, inputs.destination, setCodeTo);
     }
   };
